@@ -7,5 +7,5 @@ Created on 1 lut 2020
 import main.GUI
 
 if __name__ == '__main__':
-    main.GUI.MainWindow()
+    main.GUI.MainFrame()
     pass
