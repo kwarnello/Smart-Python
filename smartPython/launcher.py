@@ -4,8 +4,7 @@ Created on 1 lut 2020
 @author: Warus
 '''
 
-import main.GUI
+from smartPython import main
 
 if __name__ == '__main__':
-    main.GUI.MainFrame()
-    pass
+    main.Main()

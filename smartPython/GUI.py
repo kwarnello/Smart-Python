@@ -5,38 +5,47 @@ Created on 1 lut 2020
 '''
 
 import tkinter
-
+from smartPython import snake
 
 class MainFrame():
     '''
     Create base frame, initialize first screen and allows to go further
     '''
-
+    ### Main frame variables
     WIDTH = 1100
     HEIGHT = 720
+    
+    ### First frame variables
     BUTTON_WIDTH = 35
     BORDER_WIDTH = 1
+    
+    ### Game frame variables
+    SNAKE_PLACE_SIZE = 702
+    SIZE_OF_ONE_CELL = 25 #### So the size of boardgame is 28x28
 
-    def __init__(self):
+    def __init__(self, main):
         '''
         Constructor
         '''
+        self.main = main
+        
         self.root = tkinter.Tk()
         
         self.initializeFrame();
 
-        self.root.deb
         self.root.mainloop()
         
     def initializeFrame(self):
         '''
-        Initialize base things for main frame
+        Initialize base things for smartPython frame
         '''
 
         self.root.resizable(False, False)
         self.root.minsize(self.WIDTH, self.HEIGHT)
         self.root.title("Smart Python")
         
+        self.root.configure(bg='black')
+
         self.firstScreen()
         
         
@@ -91,14 +100,31 @@ class MainFrame():
         Main game screen.
         Left border with play space.
         Right part info about NN.
-        '''
-        placeForSnake = (50, 10, 700, 700)
-        placeForNeurons = (750, 10, 300, 700)
+        '''        
+        self.placeForSnake = (20, 10, self.SNAKE_PLACE_SIZE+20, self.SNAKE_PLACE_SIZE+10)
+        self.placeForNeurons = (self.SNAKE_PLACE_SIZE+30, 10, 1080, self.SNAKE_PLACE_SIZE+10)
         
-        canvas = tkinter.Canvas(self.root)
-        canvas.create_rectangle(placeForSnake)
-        canvas.create_rectangle(placeForNeurons, fill="red")
+        self.canvas = tkinter.Canvas(self.root)
+        self.canvas.create_rectangle(self.placeForSnake, outline='white')
+        self.canvas.create_rectangle(self.placeForNeurons, outline='white')
+        self.canvas.configure(bg='black')
+        
+        self.canvas.pack(fill=tkinter.BOTH, expand=1)
+        
+        self.drawSnake()
+        
+    def drawSnake(self):
+        for part in self.main.snake.snakeElements:
+            self.canvas.create_rectangle(self.findRectangleCoordinates(part), fill='white', outline='black')
+        
+        
+    def findRectangleCoordinates(self, coordinates):
+        a = self.placeForSnake[0] + coordinates[0]*self.SIZE_OF_ONE_CELL
+        b = self.placeForSnake[1] + coordinates[1]*self.SIZE_OF_ONE_CELL
+        c = a+self.SIZE_OF_ONE_CELL
+        d = b+self.SIZE_OF_ONE_CELL
+        return (a,b,c,d)
+        
 
-        canvas.pack(fill=tkinter.BOTH, expand=1)
         
         
