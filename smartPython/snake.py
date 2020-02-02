@@ -54,6 +54,9 @@ class Snake(object):
             self.checkLogic(newElement)
             
     def makeVelocityDecision(self, decision):
+        '''
+        Based on prediction from NN change velocity
+        '''
         index = decision.argmax()
         if index == 0:
             self.changeVelocity(0, -1)

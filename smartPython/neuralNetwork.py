@@ -42,6 +42,8 @@ class NN(object):
         
         for i, layer in enumerate(self.model.layers):
             layer.set_weights([weights[i], np.zeros(self.zerosSize[i])])
+            
+        tf.keras.backend.clear_session()
         
     def getRandomWeights(self):
         weightA = np.empty([self.inputs, self.first])

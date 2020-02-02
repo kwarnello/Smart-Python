@@ -14,7 +14,7 @@ class Main():
     '''
     Main class handles everything
     '''
-    SLEEPING_TIME = 5  # in millis
+    SLEEPING_TIME = 0  # in millis
     
     running = True
     
