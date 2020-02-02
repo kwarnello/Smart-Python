@@ -39,8 +39,9 @@ class Main():
         '''
         
         if not self.geneticsController.isNextMember():
-            self.geneticsController.newGeneration()
-            
+            #self.geneticsController.newGeneration()
+            self.geneticsController = genetics.Genetics(self.NN) ### temporary just get new pop
+
         member = self.geneticsController.getNextMember()
         
         self.NN.setNewWeights(member.weights)
