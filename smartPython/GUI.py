@@ -147,6 +147,9 @@ class MainFrame(object):
         
         self.root.update()
         
+    def getSizeOfBoard(self):
+        return getSizeOfBoard()
+
         
 def getSizeOfBoard():
     return (MainFrame.SNAKE_PLACE_SIZE - 2) // MainFrame.SIZE_OF_ONE_CELL

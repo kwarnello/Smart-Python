@@ -4,8 +4,6 @@ Created on 2 lut 2020
 @author: Warus
 '''
 
-from smartPython import main
-
 
 class Snake(object):
     '''
@@ -30,6 +28,12 @@ class Snake(object):
         self.snakeElements = [self.position, (4, 5), (3, 5)]
             
     def changeVelocity(self, x, y):
+        '''
+        If the button that can be interpreted as 'backward' do nothing
+        else change velocity
+        '''
+        if self.velocity[0] + x == 0 and self.velocity[1] + y == 0:
+            return
         self.velocity = (x, y)
 
     def update(self):
@@ -56,11 +60,11 @@ class Snake(object):
         if self.main.food.ate(newElement):
             self.hasAte = True
         elif self.checkIfGameOver(newElement):
-            print("Game over!")
             self.gameOver = True
+            self.main.initializeNewGame()
             
     def checkIfGameOver(self, newElement):
-        size = main.GUI.getSizeOfBoard() - 1
+        size = self.main.mainFrame.getSizeOfBoard() - 1
         
         result = False
         x, y = newElement
