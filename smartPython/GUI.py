@@ -5,7 +5,6 @@ Created on 1 lut 2020
 '''
 
 import tkinter
-from smartPython import snake
 
 class MainFrame():
     '''
@@ -114,6 +113,9 @@ class MainFrame():
         self.drawSnake()
         
     def drawSnake(self):
+        '''
+        Draw snake based on list of its elements
+        '''
         for part in self.main.snake.snakeElements:
             self.canvas.create_rectangle(self.findRectangleCoordinates(part), fill='white', outline='black')
         
@@ -125,6 +127,9 @@ class MainFrame():
         d = b+self.SIZE_OF_ONE_CELL
         return (a,b,c,d)
         
+        
+def getSizeOfBoard():
+    return (MainFrame.SNAKE_PLACE_SIZE-2)//MainFrame.SIZE_OF_ONE_CELL
 
         
         
