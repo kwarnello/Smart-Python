@@ -57,28 +57,28 @@ class MainFrame(object):
                                     text='New game',
                                     width=self.BUTTON_WIDTH,
                                     borderwidth=self.BORDER_WIDTH,
-                                    command=self.newGame)
+                                    command=self.newGame).place(relx=0.5, rely=0.38)
         
         loadButton = tkinter.Button(self.root,
                                     text='Load',
                                     width=self.BUTTON_WIDTH,
-                                    borderwidth=self.BORDER_WIDTH)
+                                    borderwidth=self.BORDER_WIDTH).place(relx=0.5, rely=0.46)
         
         optionsButton = tkinter.Button(self.root,
                                     text='Options',
                                     width=self.BUTTON_WIDTH,
-                                    borderwidth=self.BORDER_WIDTH)
+                                    borderwidth=self.BORDER_WIDTH).place(relx=0.5, rely=0.54)
         
         exitButton = tkinter.Button(self.root,
                                     text='Exit',
                                     width=self.BUTTON_WIDTH,
                                     borderwidth=self.BORDER_WIDTH,
-                                    command=self.exitCommand)
+                                    command=self.exitCommand).place(relx=0.5, rely=0.62)
         
-        newGameButton.pack()
-        loadButton.pack()
-        optionsButton.pack()
-        exitButton.pack()
+        # newGameButton.pack()
+        # loadButton.pack()
+        # optionsButton.pack()
+        # exitButton.pack()
         
     def newGame(self):
         for widget in self.root.winfo_children():
@@ -108,8 +108,14 @@ class MainFrame(object):
         
         self.canvas = tkinter.Canvas(self.root)
         self.canvas.create_rectangle(self.placeForSnake, outline='white')
-        self.canvas.create_rectangle(self.placeForNeurons, outline='white')
+        
+        # self.canvas.create_rectangle(self.placeForNeurons, outline='white')
         self.canvas.configure(bg='black')
+        
+        self.highscoreLabel = tkinter.Label(self.canvas, text="Highscore: 0", bg="Black", foreground="White")
+        self.highscoreLabel.place(x=self.placeForNeurons[0], y=self.placeForNeurons[3] - 75)
+        self.scoreLabel = tkinter.Label(self.canvas, text="Score: 0", bg="Black", foreground="White")
+        self.scoreLabel.place(x=self.placeForNeurons[0], y=self.placeForNeurons[3] - 55)
         
         self.canvas.pack(fill=tkinter.BOTH, expand=1)
         
@@ -145,6 +151,9 @@ class MainFrame(object):
         self.drawSnake()
         self.drawFood()
         
+        self.highscoreLabel.config(text="Highscore: " + str(self.main.score.getHighscore()))
+        self.scoreLabel.config(text="Score: " + str(self.main.score.getScore()))
+
         self.root.update()
         
     def getSizeOfBoard(self):

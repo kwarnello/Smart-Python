@@ -59,6 +59,7 @@ class Snake(object):
         
         if self.main.food.ate(newElement):
             self.hasAte = True
+            self.main.score.addScore()
         elif self.checkIfGameOver(newElement):
             self.gameOver = True
             self.main.initializeNewGame()

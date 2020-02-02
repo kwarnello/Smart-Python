@@ -6,7 +6,7 @@ Created on 2 lut 2020
 
 import time
 
-from smartPython import GUI, snake, food, moveController
+from smartPython import GUI, snake, food, moveController, score
 
 
 class Main():
@@ -22,9 +22,13 @@ class Main():
         Constructor
         '''
         self.mainFrame = GUI.MainFrame(self)
+        self.score = score.Score()
+
+        # It has to be at the end on constructor
         self.mainFrame.startLoop()
         
     def initializeNewGame(self):
+        self.score.newGame()
         self.snake = snake.Snake(self)
         self.food = food.Food(self.snake)
         self.controller = moveController.Controller(self)
