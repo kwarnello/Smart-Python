@@ -53,32 +53,27 @@ class MainFrame(object):
         '''
         First screen where user can start new game, load, options or exit
         '''
-        newGameButton = tkinter.Button(self.root,
-                                    text='New game',
-                                    width=self.BUTTON_WIDTH,
-                                    borderwidth=self.BORDER_WIDTH,
-                                    command=self.newGame).place(relx=0.5, rely=0.38)
+        tkinter.Button(self.root,
+                        text='New game',
+                        width=self.BUTTON_WIDTH,
+                        borderwidth=self.BORDER_WIDTH,
+                        command=self.newGame).place(relx=0.38, rely=0.38)
         
-        loadButton = tkinter.Button(self.root,
-                                    text='Load',
-                                    width=self.BUTTON_WIDTH,
-                                    borderwidth=self.BORDER_WIDTH).place(relx=0.5, rely=0.46)
+        tkinter.Button(self.root,
+                        text='Load',
+                        width=self.BUTTON_WIDTH,
+                        borderwidth=self.BORDER_WIDTH).place(relx=0.38, rely=0.46)
         
-        optionsButton = tkinter.Button(self.root,
-                                    text='Options',
-                                    width=self.BUTTON_WIDTH,
-                                    borderwidth=self.BORDER_WIDTH).place(relx=0.5, rely=0.54)
+        tkinter.Button(self.root,
+                        text='Options',
+                        width=self.BUTTON_WIDTH,
+                        borderwidth=self.BORDER_WIDTH).place(relx=0.38, rely=0.54)
         
-        exitButton = tkinter.Button(self.root,
-                                    text='Exit',
-                                    width=self.BUTTON_WIDTH,
-                                    borderwidth=self.BORDER_WIDTH,
-                                    command=self.exitCommand).place(relx=0.5, rely=0.62)
-        
-        # newGameButton.pack()
-        # loadButton.pack()
-        # optionsButton.pack()
-        # exitButton.pack()
+        tkinter.Button(self.root,
+                        text='Exit',
+                        width=self.BUTTON_WIDTH,
+                        borderwidth=self.BORDER_WIDTH,
+                        command=self.exitCommand).place(relx=0.38, rely=0.62)
         
     def newGame(self):
         for widget in self.root.winfo_children():
