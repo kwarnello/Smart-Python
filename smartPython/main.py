@@ -4,21 +4,33 @@ Created on 2 lut 2020
 @author: Warus
 '''
 
+import time
+
 from smartPython import GUI, snake, food, moveController
+
 
 class Main():
     '''
-    classdocs
+    Main class handles everything
     '''
+    SLEEPING_TIME = 500  # # in millis
+    
+    running = True
     
     def __init__(self):
         '''
         Constructor
         '''
-        self.GUI = GUI.MainFrame(self)
-        
+        self.mainFrame = GUI.MainFrame(self)
+        self.mainFrame.startLoop()
         
     def initializeNewGame(self):
         self.snake = snake.Snake()
         self.food = food.Food(self.snake)
-        self.moveController = moveController.Controller(self)
+        self.controller = moveController.Controller(self)
+        
+    def startMainLoop(self):
+        self.snake.update()
+        self.mainFrame.update()
+        time.sleep(self.SLEEPING_TIME / 1000)
+        self.startMainLoop()

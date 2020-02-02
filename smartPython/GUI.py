@@ -7,7 +7,7 @@ Created on 1 lut 2020
 import tkinter
 
 
-class MainFrame():
+class MainFrame(object):
     '''
     Create base frame, initialize first screen and allows to go further
     '''
@@ -32,9 +32,10 @@ class MainFrame():
         self.root = tkinter.Tk()
         
         self.initializeFrame();
-
-        self.root.mainloop()
         
+    def startLoop(self):
+        self.root.mainloop()     
+           
     def initializeFrame(self):
         '''
         Initialize base things for smartPython frame
@@ -85,6 +86,7 @@ class MainFrame():
             
         self.main.initializeNewGame()
         self.initializeGameScreen()
+        self.root.after(10, self.main.startMainLoop)
     
     def loadGame(self):
         pass
@@ -133,6 +135,17 @@ class MainFrame():
         c = a + self.SIZE_OF_ONE_CELL
         d = b + self.SIZE_OF_ONE_CELL
         return (a, b, c, d)
+    
+    def update(self):
+        '''
+        Update snake frame and after that redraw everything
+        '''
+        self.canvas.create_rectangle(self.placeForSnake, outline='white', fill="black")
+        
+        self.drawSnake()
+        self.drawFood()
+        
+        self.root.update()
         
         
 def getSizeOfBoard():

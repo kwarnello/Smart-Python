@@ -24,7 +24,7 @@ class Controller(object):
         '''
         Initialize keyboard inputs after "New game" button is pressed
         '''
-        keyboard.add_hotkey('w', self.main.snake.changeVelocity, args=((0, 1)))
-        keyboard.add_hotkey('s', self.main.snake.changeVelocity, args=((0, -1)))
-        keyboard.add_hotkey('a', self.main.snake.changeVelocity, args=((-1, 0)))
-        keyboard.add_hotkey('d', self.main.snake.changeVelocity, args=((1, 0)))
+        keyboard.add_hotkey('w', self.main.snake.changeVelocity, args=(0, -1))
+        keyboard.add_hotkey('s', self.main.snake.changeVelocity, args=(0, 1))
+        keyboard.add_hotkey('a', self.main.snake.changeVelocity, args=(-1, 0))
+        keyboard.add_hotkey('d', self.main.snake.changeVelocity, args=(1, 0))

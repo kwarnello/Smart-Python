@@ -18,11 +18,18 @@ class Snake(object):
         self.length = 3
         self.position = (5, 5)
         
-        self.velocity = [0, 0] #### X, Y in range -1 to 1
+        self.velocity = (0, 0)  #### X, Y in range -1 to 1
         
-        self.snakeElements = [startingPosition, (4, 5), (3, 5)]
-
+        self.snakeElements = [self.position, (4, 5), (3, 5)]
             
     def changeVelocity(self, x, y):
         self.velocity = (x, y)
         print(self.velocity)
+
+    def update(self):
+        if self.velocity != (0, 0):
+            self.snakeElements.pop()
+            newElement = tuple([sum(x) for x in zip(self.snakeElements[0], self.velocity)])
+            print(newElement)
+            self.snakeElements.insert(0, newElement)
+            print(self.snakeElements)
