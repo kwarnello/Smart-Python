@@ -6,21 +6,22 @@ Created on 1 lut 2020
 
 import tkinter
 
+
 class MainFrame():
     '''
     Create base frame, initialize first screen and allows to go further
     '''
-    ### Main frame variables
+    # ## Main frame variables
     WIDTH = 1100
     HEIGHT = 720
     
-    ### First frame variables
+    # ## First frame variables
     BUTTON_WIDTH = 35
     BORDER_WIDTH = 1
     
-    ### Game frame variables
+    # ## Game frame variables
     SNAKE_PLACE_SIZE = 702
-    SIZE_OF_ONE_CELL = 25 #### So the size of boardgame is 28x28
+    SIZE_OF_ONE_CELL = 25  #### So the size of boardgame is 28x28
 
     def __init__(self, main):
         '''
@@ -46,7 +47,6 @@ class MainFrame():
         self.root.configure(bg='black')
 
         self.firstScreen()
-        
         
     def firstScreen(self):
         '''
@@ -83,6 +83,7 @@ class MainFrame():
         for widget in self.root.winfo_children():
             widget.destroy()
             
+        self.main.initializeNewGame()
         self.initializeGameScreen()
     
     def loadGame(self):
@@ -100,8 +101,8 @@ class MainFrame():
         Left border with play space.
         Right part info about NN.
         '''        
-        self.placeForSnake = (20, 10, self.SNAKE_PLACE_SIZE+20, self.SNAKE_PLACE_SIZE+10)
-        self.placeForNeurons = (self.SNAKE_PLACE_SIZE+30, 10, 1080, self.SNAKE_PLACE_SIZE+10)
+        self.placeForSnake = (20, 10, self.SNAKE_PLACE_SIZE + 20, self.SNAKE_PLACE_SIZE + 10)
+        self.placeForNeurons = (self.SNAKE_PLACE_SIZE + 30, 10, 1080, self.SNAKE_PLACE_SIZE + 10)
         
         self.canvas = tkinter.Canvas(self.root)
         self.canvas.create_rectangle(self.placeForSnake, outline='white')
@@ -111,6 +112,7 @@ class MainFrame():
         self.canvas.pack(fill=tkinter.BOTH, expand=1)
         
         self.drawSnake()
+        self.drawFood()
         
     def drawSnake(self):
         '''
@@ -118,18 +120,21 @@ class MainFrame():
         '''
         for part in self.main.snake.snakeElements:
             self.canvas.create_rectangle(self.findRectangleCoordinates(part), fill='white', outline='black')
-        
+            
+    def drawFood(self):
+        '''
+        Draw snake based on list of its elements
+        '''
+        self.canvas.create_rectangle(self.findRectangleCoordinates(self.main.food.position), fill='red', outline='black')
         
     def findRectangleCoordinates(self, coordinates):
-        a = self.placeForSnake[0] + coordinates[0]*self.SIZE_OF_ONE_CELL
-        b = self.placeForSnake[1] + coordinates[1]*self.SIZE_OF_ONE_CELL
-        c = a+self.SIZE_OF_ONE_CELL
-        d = b+self.SIZE_OF_ONE_CELL
-        return (a,b,c,d)
+        a = self.placeForSnake[0] + coordinates[0] * self.SIZE_OF_ONE_CELL
+        b = self.placeForSnake[1] + coordinates[1] * self.SIZE_OF_ONE_CELL
+        c = a + self.SIZE_OF_ONE_CELL
+        d = b + self.SIZE_OF_ONE_CELL
+        return (a, b, c, d)
         
         
 def getSizeOfBoard():
-    return (MainFrame.SNAKE_PLACE_SIZE-2)//MainFrame.SIZE_OF_ONE_CELL
-
-        
+    return (MainFrame.SNAKE_PLACE_SIZE - 2) // MainFrame.SIZE_OF_ONE_CELL
         

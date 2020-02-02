@@ -5,7 +5,9 @@ Created on 2 lut 2020
 '''
 
 import random
-from smartPython import main, snake
+
+from smartPython import main
+
 
 class Food(object):
     '''
@@ -24,7 +26,7 @@ class Food(object):
         '''
         Generate new food and check if that food is not inside the snake
         '''
-        size = main.GUI.getSizeOfBoard()
+        size = main.GUI.getSizeOfBoard()-1
         
         while True:
             newPosition = (random.randint(0, size), random.randint(0, size))
