@@ -26,10 +26,16 @@ class Food(object):
         '''
         Generate new food and check if that food is not inside the snake
         '''
-        size = main.GUI.getSizeOfBoard()-1
+        size = main.GUI.getSizeOfBoard() - 1
         
         while True:
             newPosition = (random.randint(0, size), random.randint(0, size))
             if newPosition not in self.snake.snakeElements:
-                print("Nowa pozycja", newPosition)
                 return newPosition
+    
+    def ate(self, newElement):
+        if newElement == self.position:
+            self.position = self.generatePosition()
+            return True
+        else:
+            return False

@@ -13,7 +13,7 @@ class Main():
     '''
     Main class handles everything
     '''
-    SLEEPING_TIME = 500  # # in millis
+    SLEEPING_TIME = 200  # # in millis
     
     running = True
     
@@ -25,7 +25,7 @@ class Main():
         self.mainFrame.startLoop()
         
     def initializeNewGame(self):
-        self.snake = snake.Snake()
+        self.snake = snake.Snake(self)
         self.food = food.Food(self.snake)
         self.controller = moveController.Controller(self)
         

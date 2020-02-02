@@ -4,32 +4,71 @@ Created on 2 lut 2020
 @author: Warus
 '''
 
+from smartPython import main
+
 
 class Snake(object):
     '''
     Class for snake
     '''
 
-    def __init__(self, length=3, startingPosition=(5, 5)):
+    def __init__(self, main, length=3, startingPosition=(5, 5)):
         '''
         Create snake
         '''
-        # ## Temporary the length and starting position are fixed
+        self.main = main
+        
+        # ## Temporary the length and starting position are fixed     
         self.length = 3
         self.position = (5, 5)
         
         self.velocity = (0, 0)  #### X, Y in range -1 to 1
         
+        self.hasAte = False
+        self.gameOver = False
+        
         self.snakeElements = [self.position, (4, 5), (3, 5)]
             
     def changeVelocity(self, x, y):
         self.velocity = (x, y)
-        print(self.velocity)
 
     def update(self):
+        '''
+        Update snake every frame.
+        Firstly check if hit the food.
+        Next move it
+        '''
         if self.velocity != (0, 0):
-            self.snakeElements.pop()
+            if not self.hasAte:
+                self.snakeElements.pop()
             newElement = tuple([sum(x) for x in zip(self.snakeElements[0], self.velocity)])
-            print(newElement)
             self.snakeElements.insert(0, newElement)
-            print(self.snakeElements)
+            
+            self.checkLogic(newElement)
+            
+    def checkLogic(self, newElement):
+        '''
+        Check if snake got some snacks or bites itself
+        '''
+        self.hasAte = False
+        self.gameOver = False
+        
+        if self.main.food.ate(newElement):
+            self.hasAte = True
+        elif self.checkIfGameOver(newElement):
+            print("Game over!")
+            self.gameOver = True
+            
+    def checkIfGameOver(self, newElement):
+        size = main.GUI.getSizeOfBoard() - 1
+        
+        result = False
+        x, y = newElement
+        if (x > size or x < 0):
+            result = True
+        elif (y > size or y < 0):
+            result = True
+        elif newElement in self.snakeElements[1:]:
+            result = True
+
+        return result
