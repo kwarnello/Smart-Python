@@ -20,7 +20,7 @@ class MainFrame(object):
     BORDER_WIDTH = 1
     
     # ## Game frame variables
-    SNAKE_PLACE_SIZE = 702
+    SNAKE_PLACE_SIZE = 700
     SIZE_OF_ONE_CELL = 25  #### So the size of boardgame is 28x28
 
     def __init__(self, main):
@@ -156,5 +156,5 @@ class MainFrame(object):
 
         
 def getSizeOfBoard():
-    return (MainFrame.SNAKE_PLACE_SIZE - 2) // MainFrame.SIZE_OF_ONE_CELL
+    return MainFrame.SNAKE_PLACE_SIZE // MainFrame.SIZE_OF_ONE_CELL
         

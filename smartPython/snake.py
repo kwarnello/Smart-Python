@@ -10,7 +10,7 @@ class Snake(object):
     Class for snake
     '''
 
-    def __init__(self, main, length=3, startingPosition=(5, 5)):
+    def __init__(self, main, intelligence=None, length=3, startingPosition=(5, 5)):
         '''
         Create snake
         '''
@@ -26,7 +26,10 @@ class Snake(object):
         self.gameOver = False
         
         self.snakeElements = [self.position, (4, 5), (3, 5)]
-            
+        
+        if intelligence != None:
+            pass
+        
     def changeVelocity(self, x, y):
         '''
         If the button that can be interpreted as 'backward' do nothing
