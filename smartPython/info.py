@@ -24,7 +24,11 @@ class Info(object):
         '''
         Inputs as follows: first distance (normalized between 0 and size of board), second snake, third wall.
         0-2 - North, 3-5 - South, 6-8 - West, 9-11 - East, 12-13 - vector to the food
+        
+        Dummy inputs creation
         '''
+        
+        inputs = np.zeros([1, 14])
         
         snakePosition = snake.snakeElements
         x, y = snakePosition[0]
@@ -38,7 +42,10 @@ class Info(object):
                 break
         if len(n) == 0:
             n = [y / self.sizeOfBoard, 0, 1]
-            
+        inputs[0][0] = n[0]
+        inputs[0][1] = n[1]
+        inputs[0][2] = n[2]
+
         # South
         s = []
         for i in range(y + 1, self.sizeOfBoard + 1):
@@ -48,6 +55,9 @@ class Info(object):
                 break
         if len(s) == 0:
             s = [(self.sizeOfBoard - y) / self.sizeOfBoard, 0, 1]
+        inputs[0][3] = s[0]
+        inputs[0][4] = s[1]
+        inputs[0][5] = s[2]
 
         # West
         w = []
@@ -58,6 +68,9 @@ class Info(object):
                 break
         if len(w) == 0:
             w = [x / self.sizeOfBoard, 0, 1]
+        inputs[0][6] = w[0]
+        inputs[0][7] = w[1]
+        inputs[0][8] = w[2]
 
         # East
         e = []
@@ -68,10 +81,12 @@ class Info(object):
                 break
         if len(e) == 0:
             e = [(self.sizeOfBoard - x) / self.sizeOfBoard, 0, 1]
-            
-        # East
-        f = [0, 0]
-        f[0] = (foodCoords[0] - x) / self.sizeOfBoard
-        f[1] = (foodCoords[1] - y) / self.sizeOfBoard
+        inputs[0][9] = e[0]
+        inputs[0][10] = e[1]
+        inputs[0][11] = e[2]
 
-        return np.concatenate([n, s, w, e, f])
+        # Food
+        inputs[0][12] = (foodCoords[0] - x) / self.sizeOfBoard
+        inputs[0][13] = (foodCoords[1] - y) / self.sizeOfBoard
+        
+        return inputs

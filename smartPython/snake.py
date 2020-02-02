@@ -10,7 +10,7 @@ class Snake(object):
     Class for snake
     '''
 
-    def __init__(self, main, intelligence=None, length=3, startingPosition=(5, 5)):
+    def __init__(self, main, length=3, startingPosition=(5, 5)):
         '''
         Create snake
         '''
@@ -27,9 +27,6 @@ class Snake(object):
         
         self.snakeElements = [self.position, (4, 5), (3, 5)]
         
-        if intelligence != None:
-            pass
-        
     def changeVelocity(self, x, y):
         '''
         If the button that can be interpreted as 'backward' do nothing
@@ -39,12 +36,15 @@ class Snake(object):
             return
         self.velocity = (x, y)
 
-    def update(self):
+    def update(self, decision):
         '''
         Update snake every frame.
         Firstly check if hit the food.
         Next move it
         '''
+        
+        self.makeVelocityDecision(decision)
+        print(decision)
         if self.velocity != (0, 0):
             if not self.hasAte:
                 self.snakeElements.pop()
@@ -52,6 +52,17 @@ class Snake(object):
             self.snakeElements.insert(0, newElement)
             
             self.checkLogic(newElement)
+            
+    def makeVelocityDecision(self, decision):
+        index = decision.argmax()
+        if index == 0:
+            self.changeVelocity(0, -1)
+        if index == 1:
+            self.changeVelocity(0, 1)
+        if index == 2:
+            self.changeVelocity(-1, 0)
+        if index == 3:
+            self.changeVelocity(1, 0)
             
     def checkLogic(self, newElement):
         '''

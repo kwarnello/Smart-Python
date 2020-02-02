@@ -5,16 +5,16 @@ Created on 2 lut 2020
 '''
 
 import time
-import numpy as np
 
-from smartPython import GUI, snake, food, moveController, score, neuralNetwork, info
+from smartPython import GUI, snake, food, moveController, score, neuralNetwork, info, \
+    genetics
 
 
 class Main():
     '''
     Main class handles everything
     '''
-    SLEEPING_TIME = 200  # # in millis
+    SLEEPING_TIME = 5  # in millis
     
     running = True
     
@@ -25,21 +25,40 @@ class Main():
         self.mainFrame = GUI.MainFrame(self)
         self.score = score.Score()
         self.info = info.Info()
-        self.brain = neuralNetwork.NN()
-        
+        self.NN = neuralNetwork.NN()
+        self.geneticsController = genetics.Genetics(self.NN)
+
         # It has to be at the end on constructor
         self.mainFrame.startLoop()
         
     def initializeNewGame(self):
-        self.score.newGame()
-        self.snake = snake.Snake(self, intelligence=1)
-        self.food = food.Food(self.snake)
-        self.controller = moveController.Controller(self)
+        '''
+        After losing generate new stuff
+        If there is new member get it. If not generate new population.
+        Reset score, create new snake and so on.
+        '''
         
+        if not self.geneticsController.isNextMember():
+            self.geneticsController.newGeneration()
+            
+        member = self.geneticsController.getNextMember()
+        
+        self.NN.setNewWeights(member.weights)
+        
+        self.snake = snake.Snake(self)
+        self.food = food.Food(self.snake)
+        
+        self.score.newGame()
+        self.controller = moveController.Controller(self)
+
     def startMainLoop(self):
+        '''
+        Main loop. Firstly get inputs info, then predict decison and make decision by snake.
+        '''
         inputs = self.info.getAllInfo(self.snake, self.food.position)
-        print(inputs)
-        self.snake.update()
+        decision = self.NN.predict(inputs)
+        
+        self.snake.update(decision)
         self.mainFrame.update()
         time.sleep(self.SLEEPING_TIME / 1000)
         self.startMainLoop()

@@ -4,7 +4,9 @@ Created on 2 lut 2020
 @author: Warus
 '''
 
-import pandas as pd
+import copy
+
+from smartPython import member
 
 
 class Genetics(object):
@@ -12,28 +14,48 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, populationSize=20):
+    def __init__(self, NN, populationSize=100):
         '''
         Constructor
         '''
+        self.NN = NN
         
         self.populationSize = populationSize
         
         self.generationCounter = 0
+        self.IDCounter = 0 
+        
+        self.population = []
+        self.populationToCheck = []
+        
+        self.firstGeneration()
 
-    def fitness(self):  
-        return 1
+    def firstGeneration(self):
+        for _ in range(self.populationSize):
+            self.population.append(self.createMember(self.IDCounter))
+            self.IDCounter += 1
+            
+        self.populationToCheck = copy.deepcopy(self.population)
+        print(self.population)
+        
+    def newGeneration(self):
+        pass
     
-    def crossover(self, a, b):
-        c = a + b
-        return c
+    def isNextMember(self):
+        return True if (len(self.populationToCheck) > 0) else False
+    
+    def getNextMember(self):
+        return self.populationToCheck.pop()
+
+    def createMember(self, ID):
+        return member.Member(ID, self.NN.getRandomWeights())
+
+    def crossover(self, memA, memB):
+        memC = memA + memB
+        return memC
 
     def mutate(self, member):
         return member
-    
-    def createMember(self):
-        member = 0
-        return member
 
-    def newGeneration(self, population):
-        return population
+    def fitness(self, member):  
+        return member.highscore
