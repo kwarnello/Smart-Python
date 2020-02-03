@@ -13,7 +13,7 @@ class NN(object):
     Class for Neural Network.
     '''
 
-    def __init__(self, inputs=14, first=16, second=8):
+    def __init__(self, inputs=14, first=12, second=12):
         '''
         Constructor
         '''
@@ -43,7 +43,7 @@ class NN(object):
         for i, layer in enumerate(self.model.layers):
             layer.set_weights([weights[i], np.zeros(self.zerosSize[i])])
             
-        tf.keras.backend.clear_session()
+        #tf.keras.backend.clear_session()
         
     def getRandomWeights(self):
         weightA = np.empty([self.inputs, self.first])

@@ -18,7 +18,7 @@ class Main():
     
     running = True
     
-    ### Temporary var for measure of time for debugging
+    # ## Temporary var for measure of time for debugging
     time_nn = 0
     time_snake = 0
     time_newGame = 0
@@ -62,27 +62,28 @@ class Main():
         # self.controller = moveController.Controller(self)
         self.time_newGame += (time.time() - start)
         
-        self.printRaport()
+        # self.printRaport()
 
     def startMainLoop(self):
         '''
         Main loop. Firstly get inputs info, then predict decison and make decision by snake.
         '''
-        start = time.time()
-        inputs = self.info.getAllInfo(self.snake, self.food.position)
-        decision = self.NN.predict(inputs)
-        self.time_nn += (time.time() - start)
-        
-        start = time.time()
-        self.snake.update(decision)
-        self.time_snake += (time.time() - start)
-        
-        start = time.time()
-        self.mainFrame.update()
-        self.time_graphics += (time.time() - start)
-
-        time.sleep(self.SLEEPING_TIME / 1000)
-        self.startMainLoop()
+        while self.running:
+            start = time.time()
+            inputs = self.info.getAllInfo(self.snake, self.food.position)
+            decision = self.NN.predict(inputs)
+            self.time_nn += (time.time() - start)
+            
+            start = time.time()
+            self.snake.update(decision)
+            self.time_snake += (time.time() - start)
+            
+            start = time.time()
+            self.mainFrame.update()
+            self.time_graphics += (time.time() - start)
+    
+            time.sleep(self.SLEEPING_TIME / 1000)
+        # self.startMainLoop()
         
     def printRaport(self):
         print("NN times ", self.time_nn / self.newGameCounter)

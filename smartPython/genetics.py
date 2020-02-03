@@ -31,6 +31,7 @@ class Genetics(object):
         self.firstGeneration()
 
     def firstGeneration(self):
+        self.generationCounter += 1
         for _ in range(self.populationSize):
             self.population.append(self.createMember(self.IDCounter))
             self.IDCounter += 1
@@ -58,3 +59,6 @@ class Genetics(object):
 
     def fitness(self, member):  
         return member.highscore
+    
+    def getMemberCount(self):
+        return len(self.population) - len(self.populationToCheck)

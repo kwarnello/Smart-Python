@@ -111,6 +111,10 @@ class MainFrame(object):
         self.highscoreLabel.place(x=self.placeForNeurons[0], y=self.placeForNeurons[3] - 75)
         self.scoreLabel = tkinter.Label(self.root, text="Score: 0", bg="Black", foreground="White")
         self.scoreLabel.place(x=self.placeForNeurons[0], y=self.placeForNeurons[3] - 55)
+        self.generationLabel = tkinter.Label(self.root, text="Generation: 0", bg="Black", foreground="White", font=(16))
+        self.generationLabel.place(x=self.placeForNeurons[0], y=self.placeForNeurons[1] + 20)
+        self.snakeLabel = tkinter.Label(self.root, text="Snake number: 0", bg="Black", foreground="White", font=(14))
+        self.snakeLabel.place(x=self.placeForNeurons[0], y=self.placeForNeurons[1] + 40)
         
         self.canvas.pack(fill=tkinter.BOTH, expand=1)
         
@@ -150,7 +154,9 @@ class MainFrame(object):
         
         self.highscoreLabel.config(text="Highscore: " + str(self.main.score.getHighscore()))
         self.scoreLabel.config(text="Score: " + str(self.main.score.getScore()))
-
+        self.generationLabel.config(text="Generation: " + str(self.main.geneticsController.generationCounter))
+        self.snakeLabel.config(text="Snake: {} ({})".format(self.main.geneticsController.getMemberCount(), self.main.geneticsController.populationSize))
+        
         self.root.update()
         
     def getSizeOfBoard(self):
