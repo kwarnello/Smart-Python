@@ -44,7 +44,7 @@ class Snake(object):
         '''
         
         self.makeVelocityDecision(decision)
-        print(decision)
+        #print(decision)
         if self.velocity != (0, 0):
             if not self.hasAte:
                 self.snakeElements.pop()

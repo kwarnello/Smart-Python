@@ -14,7 +14,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, NN, populationSize=10):
+    def __init__(self, NN, populationSize=50):
         '''
         Constructor
         '''
