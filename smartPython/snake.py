@@ -10,7 +10,7 @@ class Snake(object):
     Class for snake
     '''
 
-    def __init__(self, main, length=3, startingPosition=(5, 5), maxStep=500):
+    def __init__(self, main, length=4, startingPosition=(5, 5), maxStep=500):
         '''
         Create snake
         '''
@@ -27,7 +27,7 @@ class Snake(object):
         
         self.hasAte = False
         
-        self.snakeElements = [self.position, (4, 5), (3, 5)]
+        self.snakeElements = [self.position, (4, 5), (4, 4), (5, 4)]
         
     def changeVelocity(self, x, y):
         '''

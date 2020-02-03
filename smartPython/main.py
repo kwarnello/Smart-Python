@@ -51,6 +51,7 @@ class Main():
 
         if not self.geneticsController.isNextMember():
             self.geneticsController.newGeneration()
+            self.printRaport()
 
         member = self.geneticsController.getNextMember()
         
@@ -61,9 +62,7 @@ class Main():
         
         self.score.newGame()
         # self.controller = moveController.Controller(self)
-        self.time_newGame += (time.time() - start)
-        
-        # self.printRaport()
+        self.time_newGame += (time.time() - start) 
 
     def startMainLoop(self):
         '''
@@ -91,4 +90,6 @@ class Main():
         print("Graphics times ", self.time_graphics / self.newGameCounter)
         print("Snake times ", self.time_snake / self.newGameCounter)
         print("New game times ", self.time_newGame / self.newGameCounter)
+        print("###########################")
+        print()
 

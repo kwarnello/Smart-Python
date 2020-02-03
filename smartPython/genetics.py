@@ -81,6 +81,7 @@ class Genetics(object):
                 iKilled += 1
             if iKilled >= iShouldKill:
                 break
+        print(iKilled)
             
     def createChild(self):
         '''
@@ -134,7 +135,6 @@ class Genetics(object):
                         temp_second[k] = weightB[i][j][k]
                 temp[j] = list(temp_second)
             newWeights.append(np.array(temp))
-        print(newWeights)
         
         return newWeights
     
