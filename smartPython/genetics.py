@@ -15,7 +15,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, NN, populationSize=200, percentageWeak=0.55, percentageChilds=0.45):
+    def __init__(self, NN, populationSize=10, percentageWeak=0.55, percentageChilds=0.45):
         '''
         Constructor
         '''
@@ -60,10 +60,14 @@ class Genetics(object):
         '''
         for v in self.population.values():
             self.scorerStats.append(v.score)
+            
         self.ave = np.average(self.scorerStats)
         self.med = np.median(self.scorerStats)
+        
+        print("Generation {}".format(self.generationCounter))
         print("Average {:.3f} +/- {:.3f}".format(self.ave, np.std(self.scorerStats)))
         print("Median {:.3f}".format(self.med))
+        print()
 
     def killWeak(self):
         '''
@@ -85,11 +89,10 @@ class Genetics(object):
         keys = list(self.population.keys())
         random.shuffle(keys)
         
-        for i in range(len(keys) // 2):
+        for _ in range(len(keys) // 2):
             newMemberWeight = self.crossover(self.population[keys.pop()], self.population[keys.pop()])
-            self.population[self.IDCounter] = self.createMember(self.IDCounter)
+            self.population[self.IDCounter] = self.createMember(self.IDCounter, newMemberWeight)
             self.IDCounter += 1
-            
     
     def isNextMember(self):
         return True if (len(self.populationToCheck) > 0) else False
@@ -111,12 +114,21 @@ class Genetics(object):
             return member.Member(ID, self.NN.getRandomWeights())
         else:
             return member.Member(ID, weights)
-            
 
     def crossover(self, memA, memB):
         weightA = memA.getWeights()
         weightB = memB.getWeights()
-        return np.mean([weightA, weightB], axis=0)
+        
+        newWeights = []
+        for i in range(len(weightA)):
+            temp = [0] * len(weightA[i])
+            for j in range(len(weightA[i])):      
+                ave = np.average([weightA[i][j], weightB[i][j]], axis=0, weights=[memA.score + 0.001, memB.score + 0.001])
+                temp[j] = list(ave)
+                
+            newWeights.append(np.array(temp))
+    
+        return newWeights
 
     def mutate(self, member):
         return member
