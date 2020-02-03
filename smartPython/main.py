@@ -46,10 +46,11 @@ class Main():
         '''
         self.newGameCounter += 1
         start = time.time()
+        
+        self.geneticsController.putScore(self.score.getScore())
 
         if not self.geneticsController.isNextMember():
-            # self.geneticsController.newGeneration()
-            self.geneticsController = genetics.Genetics(self.NN)  # ## temporary just get new pop
+            self.geneticsController.newGeneration()
 
         member = self.geneticsController.getNextMember()
         
