@@ -15,7 +15,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, NN, populationSize=10, percentageWeak=0.55, percentageChilds=0.45):
+    def __init__(self, NN, populationSize=1000, percentageWeak=0.55, percentageChilds=0.45):
         '''
         Constructor
         '''
@@ -116,19 +116,38 @@ class Genetics(object):
             return member.Member(ID, weights)
 
     def crossover(self, memA, memB):
+        '''
+        Old cross over ass average
+        '''
         weightA = memA.getWeights()
         weightB = memB.getWeights()
         
         newWeights = []
-        for i in range(len(weightA)):
+        for  i in range(len(weightA)):
             temp = [0] * len(weightA[i])
-            for j in range(len(weightA[i])):      
-                ave = np.average([weightA[i][j], weightB[i][j]], axis=0, weights=[memA.score + 0.001, memB.score + 0.001])
-                temp[j] = list(ave)
-                
+            for j in range(len(weightA[i])):
+                temp_second = [0] * len(weightA[i][j])
+                for k in range(len(weightA[i][j])):
+                    if np.random.rand() > 0.5:
+                        temp_second[k] = weightA[i][j][k]
+                    else:
+                        temp_second[k] = weightB[i][j][k]
+            temp[j] = list(temp_second)
             newWeights.append(np.array(temp))
-    
+            
         return newWeights
+    
+    '''
+        Old cross over ass average
+        '''
+        # newWeights = []
+        # for i in range(len(weightA)):
+        #    temp = [0] * len(weightA[i])
+        #    for j in range(len(weightA[i])):      
+        #        ave = np.average([weightA[i][j], weightB[i][j]], axis=0, weights=[memA.score + 0.001, memB.score + 0.001])
+        #        temp[j] = list(ave)
+                
+        #    newWeights.append(np.array(temp))
 
     def mutate(self, member):
         return member

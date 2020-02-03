@@ -13,7 +13,7 @@ class NN(object):
     Class for Neural Network.
     '''
 
-    def __init__(self, inputs=14, first=12, second=12):
+    def __init__(self, inputs=14, first=8, second=8):
         '''
         Constructor
         '''
