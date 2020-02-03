@@ -15,7 +15,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, NN, populationSize=1000, percentageWeak=0.55, percentageChilds=0.45):
+    def __init__(self, NN, populationSize=1000, percentageWeak=0.6, percentageChilds=0.58):
         '''
         Constructor
         '''
@@ -132,9 +132,10 @@ class Genetics(object):
                         temp_second[k] = weightA[i][j][k]
                     else:
                         temp_second[k] = weightB[i][j][k]
-            temp[j] = list(temp_second)
+                temp[j] = list(temp_second)
             newWeights.append(np.array(temp))
-            
+        print(newWeights)
+        
         return newWeights
     
     '''
