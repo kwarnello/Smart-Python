@@ -10,7 +10,7 @@ class Snake(object):
     Class for snake
     '''
 
-    def __init__(self, main, length=3, startingPosition=(5, 5)):
+    def __init__(self, main, length=3, startingPosition=(5, 5), maxStep=500):
         '''
         Create snake
         '''
@@ -22,8 +22,10 @@ class Snake(object):
         
         self.velocity = (0, 0)  #### X, Y in range -1 to 1
         
+        self.maxStep = maxStep
+        self.steps = 0
+        
         self.hasAte = False
-        self.gameOver = False
         
         self.snakeElements = [self.position, (4, 5), (3, 5)]
         
@@ -42,9 +44,12 @@ class Snake(object):
         Firstly check if hit the food.
         Next move it
         '''
+        self.steps += 1
+        if self.steps >= self.maxStep:
+            self.gameOver()
         
         self.makeVelocityDecision(decision)
-        #print(decision)
+        # print(decision)
         if self.velocity != (0, 0):
             if not self.hasAte:
                 self.snakeElements.pop()
@@ -72,14 +77,12 @@ class Snake(object):
         Check if snake got some snacks or bites itself
         '''
         self.hasAte = False
-        self.gameOver = False
         
         if self.main.food.ate(newElement):
             self.hasAte = True
             self.main.score.addScore()
         elif self.checkIfGameOver(newElement):
-            self.gameOver = True
-            self.main.initializeNewGame()
+            self.gameOver()
             
     def checkIfGameOver(self, newElement):
         size = self.main.mainFrame.getSizeOfBoard() - 1
@@ -94,3 +97,6 @@ class Snake(object):
             result = True
 
         return result
+    
+    def gameOver(self):
+        self.main.initializeNewGame()

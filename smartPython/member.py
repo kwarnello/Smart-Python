@@ -20,11 +20,10 @@ class Member(object):
         self.ID = ID
         self.weights = weights
         
-        self.highscore = 0
+        self.score = 0
         
-    def setHighscore(self, highscore):
-        if highscore > self.highscore:
-            self.highscore = highscore
+    def setScore(self, score):
+        self.score = score
 
     def getWeights(self):
         return self.weights

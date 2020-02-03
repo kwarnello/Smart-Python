@@ -5,6 +5,7 @@ Created on 2 lut 2020
 '''
 import copy
 import numpy as np
+import random
 
 from smartPython import member
 
@@ -14,7 +15,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, NN, populationSize=10, percentageWeak=0.5):
+    def __init__(self, NN, populationSize=200, percentageWeak=0.55, percentageChilds=0.45):
         '''
         Constructor
         '''
@@ -33,6 +34,7 @@ class Genetics(object):
         self.scorerStats = []
         
         self.percentageWeak = percentageWeak
+        self.percentageChilds = percentageChilds
         
         self.createGeneration()
 
@@ -48,27 +50,46 @@ class Genetics(object):
     def newGeneration(self):
         self.countStatistics()
         self.killWeak()
-        
+        self.createChild()
         self.createGeneration()
         pass
     
     def countStatistics(self):
+        '''
+        Get basic stats that decision about killing can be made
+        '''
         for v in self.population.values():
-            self.scorerStats.append(v.highscore)
+            self.scorerStats.append(v.score)
         self.ave = np.average(self.scorerStats)
         self.med = np.median(self.scorerStats)
-        print("Average {:.2f} +/- {:.2f}".format(self.ave, np.std(self.scorerStats)))
-        print("Median {:.2f}".format(self.med))
+        print("Average {:.3f} +/- {:.3f}".format(self.ave, np.std(self.scorerStats)))
+        print("Median {:.3f}".format(self.med))
 
     def killWeak(self):
+        '''
+        Kill all that are weaker than median
+        '''
         iShouldKill = int(self.populationSize * self.percentageWeak)
         iKilled = 0
         for k in list(self.population.keys()):
-            if self.population[k].highscore <= self.med:
+            if self.population[k].score <= self.med:
                 del(self.population[k])
                 iKilled += 1
             if iKilled >= iShouldKill:
                 break
+            
+    def createChild(self):
+        '''
+        Create child based on random parents. Take on from begining of shuffle list and one from the end
+        '''
+        keys = list(self.population.keys())
+        random.shuffle(keys)
+        
+        for i in range(len(keys) // 2):
+            newMemberWeight = self.crossover(self.population[keys.pop()], self.population[keys.pop()])
+            self.population[self.IDCounter] = self.createMember(self.IDCounter)
+            self.IDCounter += 1
+            
     
     def isNextMember(self):
         return True if (len(self.populationToCheck) > 0) else False
@@ -83,20 +104,25 @@ class Genetics(object):
     
     def putScore(self, score):
         if self.workerID != None:
-            self.population[self.workerID].setHighscore(score)
+            self.population[self.workerID].setScore(score)
 
-    def createMember(self, ID):
-        return member.Member(ID, self.NN.getRandomWeights())
+    def createMember(self, ID, weights=None):
+        if weights == None:
+            return member.Member(ID, self.NN.getRandomWeights())
+        else:
+            return member.Member(ID, weights)
+            
 
     def crossover(self, memA, memB):
-        memC = memA + memB
-        return memC
+        weightA = memA.getWeights()
+        weightB = memB.getWeights()
+        return np.mean([weightA, weightB], axis=0)
 
     def mutate(self, member):
         return member
 
     def fitness(self, member):  
-        return member.highscore
+        return member.score
     
     def getMemberCount(self):
         return len(self.population) - len(self.populationToCheck)
