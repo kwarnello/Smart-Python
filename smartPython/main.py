@@ -18,7 +18,7 @@ class Main():
     
     running = True
     
-    # ## Temporary var for measure of 
+    ### Temporary var for measure of time for debugging
     time_nn = 0
     time_snake = 0
     time_newGame = 0
@@ -85,8 +85,8 @@ class Main():
         self.startMainLoop()
         
     def printRaport(self):
-        print("NN times ", self.time_nn/self.newGameCounter)
-        print("Graphics times ", self.time_graphics/self.newGameCounter)
-        print("Snake times ", self.time_snake/self.newGameCounter)
-        print("New game times ", self.time_newGame/self.newGameCounter)
+        print("NN times ", self.time_nn / self.newGameCounter)
+        print("Graphics times ", self.time_graphics / self.newGameCounter)
+        print("Snake times ", self.time_snake / self.newGameCounter)
+        print("New game times ", self.time_newGame / self.newGameCounter)
 

@@ -107,9 +107,9 @@ class MainFrame(object):
         # self.canvas.create_rectangle(self.placeForNeurons, outline='white')
         self.canvas.configure(bg='black')
         
-        self.highscoreLabel = tkinter.Label(self.canvas, text="Highscore: 0", bg="Black", foreground="White")
+        self.highscoreLabel = tkinter.Label(self.root, text="Highscore: 0", bg="Black", foreground="White")
         self.highscoreLabel.place(x=self.placeForNeurons[0], y=self.placeForNeurons[3] - 75)
-        self.scoreLabel = tkinter.Label(self.canvas, text="Score: 0", bg="Black", foreground="White")
+        self.scoreLabel = tkinter.Label(self.root, text="Score: 0", bg="Black", foreground="White")
         self.scoreLabel.place(x=self.placeForNeurons[0], y=self.placeForNeurons[3] - 55)
         
         self.canvas.pack(fill=tkinter.BOTH, expand=1)
@@ -141,6 +141,8 @@ class MainFrame(object):
         '''
         Update snake frame and after that redraw everything
         '''
+        self.canvas.delete("all")
+            
         self.canvas.create_rectangle(self.placeForSnake, outline='white', fill="black")
         
         self.drawSnake()
