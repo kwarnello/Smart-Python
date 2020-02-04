@@ -4,21 +4,24 @@ Created on 2 lut 2020
 @author: Warus
 '''
 
+import numpy as np
+from smartPython import GUI
+
 
 class Snake(object):
     '''
     Class for snake
     '''
 
-    def __init__(self, main, length=4, startingPosition=(5, 5), maxStep=500):
+    def __init__(self, main, length=3, maxStep=100):
         '''
         Create snake
         '''
         self.main = main
         
         # ## Temporary the length and starting position are fixed     
-        self.length = 3
-        self.position = (5, 5)
+        self.length = length
+        self.snakeElements = self.generateStartingSnake()
         
         self.velocity = (0, 0)  #### X, Y in range -1 to 1
         
@@ -27,7 +30,35 @@ class Snake(object):
         
         self.hasAte = False
         
-        self.snakeElements = [self.position, (4, 5), (4, 4), (5, 4)]
+    def generateStartingSnake(self):
+        '''
+        Generate new snake as long as it will be inside board
+        '''
+        x, y = (np.random.randint(0, GUI.getSizeOfBoard()), np.random.randint(0, GUI.getSizeOfBoard()))
+        output = [(x, y)]
+        
+        for i in range(self.length - 1):
+            while True:
+                rand = np.random.rand()
+                if rand > 0.5:
+                    if rand > 0.75:
+                        dx = 1
+                    else:
+                        dx = -1
+                    if x + dx >= 0 and x + dx < GUI.getSizeOfBoard() and (x + dx, y) not in output:
+                        x, y = x + dx, y
+                        break
+                else:
+                    if rand > 0.25:
+                        dy = 1
+                    else:
+                        dy = -1
+                    if y + dy >= 0 and y + dy < GUI.getSizeOfBoard() and (x, y + dy) not in output:
+                        (x, y) = (x, y + dy)
+                        break
+            output.append((x, y))
+        
+        return output
         
     def changeVelocity(self, x, y):
         '''

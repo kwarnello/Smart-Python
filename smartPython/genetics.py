@@ -35,7 +35,6 @@ class Genetics(object):
         self.percentageChilds = percentageChilds
         
         self.createGeneration()
-        print("Wbijam do init")
 
     def createGeneration(self):
         self.generationCounter += 1
