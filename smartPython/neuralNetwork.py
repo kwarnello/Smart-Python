@@ -13,7 +13,7 @@ class NN(object):
     Class for Neural Network.
     '''
 
-    def __init__(self, inputs=14, first=8, second=8):
+    def __init__(self, inputs=6, first=8, second=8):
         '''
         Constructor
         '''
@@ -62,3 +62,22 @@ class NN(object):
                 weightC[i][j] = 2 * np.random.rand() - 1
         
         return np.array([weightA, weightB, weightC])
+
+    
+def getRandomWeights(inputs=6, first=8, second=8, outputs=4):
+    weightA = np.empty([inputs, first])
+    for i in range(inputs):
+        for j in range(first):
+            weightA[i][j] = 2 * np.random.rand() - 1
+        
+    weightB = np.empty([first, second])
+    for i in range(first):
+        for j in range(second):
+            weightB[i][j] = 2 * np.random.rand() - 1
+        
+    weightC = np.empty([second, outputs])
+    for i in range(second):
+        for j in range(outputs):
+            weightC[i][j] = 2 * np.random.rand() - 1
+        
+    return np.array([weightA, weightB, weightC])

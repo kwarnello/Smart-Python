@@ -7,7 +7,7 @@ import copy
 import numpy as np
 import random
 
-from smartPython import member
+from smartPython import member, neuralNetwork
 
 
 class Genetics(object):
@@ -15,12 +15,10 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, NN, populationSize=1000, percentageWeak=0.6, percentageChilds=0.58):
+    def __init__(self, populationSize=1000, percentageWeak=0.6, percentageChilds=0.58):
         '''
         Constructor
         '''
-        self.NN = NN
-        
         self.populationSize = populationSize
         
         self.generationCounter = 0
@@ -37,6 +35,7 @@ class Genetics(object):
         self.percentageChilds = percentageChilds
         
         self.createGeneration()
+        print("Wbijam do init")
 
     def createGeneration(self):
         self.generationCounter += 1
@@ -112,7 +111,7 @@ class Genetics(object):
 
     def createMember(self, ID, weights=None):
         if weights == None:
-            return member.Member(ID, self.NN.getRandomWeights())
+            return member.Member(ID, neuralNetwork.getRandomWeights())
         else:
             return member.Member(ID, weights)
 

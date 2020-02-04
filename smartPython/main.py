@@ -5,9 +5,12 @@ Created on 2 lut 2020
 '''
 
 import time
+import copy
+import pickle
 
 from smartPython import GUI, snake, food, moveController, score, neuralNetwork, info, \
     genetics
+from click.exceptions import FileError
 
 
 class Main():
@@ -33,7 +36,13 @@ class Main():
         self.score = score.Score()
         self.info = info.Info()
         self.NN = neuralNetwork.NN()
-        self.geneticsController = genetics.Genetics(self.NN)
+        
+        try:
+            with open('model.pickle', 'rb') as f:
+                self.geneticsController = pickle.load(f)
+                print("Załadowałem")
+        except FileNotFoundError:
+            self.geneticsController = genetics.Genetics()
 
         # It has to be at the end on constructor
         self.mainFrame.startLoop()
@@ -47,11 +56,13 @@ class Main():
         self.newGameCounter += 1
         start = time.time()
         
-        self.geneticsController.putScore(self.score.getScore())
+        if self.newGameCounter != 1:
+            self.geneticsController.putScore(self.score.getScore())
 
         if not self.geneticsController.isNextMember():
             self.geneticsController.newGeneration()
             self.printRaport()
+            self.save()
 
         member = self.geneticsController.getNextMember()
         
@@ -84,7 +95,11 @@ class Main():
     
             time.sleep(self.SLEEPING_TIME / 1000)
         # self.startMainLoop()
-        
+    
+    def save(self):
+        with open('model.pickle', 'wb') as f:
+            pickle.dump(self.geneticsController, f)
+
     def printRaport(self):
         print("NN times ", self.time_nn / self.newGameCounter)
         print("Graphics times ", self.time_graphics / self.newGameCounter)
