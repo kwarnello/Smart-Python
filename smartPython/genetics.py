@@ -5,7 +5,6 @@ Created on 2 lut 2020
 '''
 import copy
 import numpy as np
-import random
 
 from smartPython import member, neuralNetwork
 
@@ -15,7 +14,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, populationSize=1000, percentageWeak=0.6, percentageChilds=0.58):
+    def __init__(self, populationSize=1000, percentageWeak=0.9, percentageChilds=0.88):
         '''
         Constructor
         '''
@@ -79,20 +78,19 @@ class Genetics(object):
                 iKilled += 1
             if iKilled >= iShouldKill:
                 break
-        print(iKilled)
             
     def createChild(self):
         '''
         Create child based on random parents. Take on from begining of shuffle list and one from the end
         '''
         keys = list(self.population.keys())
-        random.shuffle(keys)
         
-        for _ in range(len(keys) // 2):
-            newMemberWeight = self.crossover(self.population[keys.pop()], self.population[keys.pop()])
+        for _ in range(int(self.populationSize * self.percentageChilds)):
+            i, j = np.random.choice(keys), np.random.choice(keys)
+            newMemberWeight = self.crossover(self.population[i], self.population[j])
             self.population[self.IDCounter] = self.createMember(self.IDCounter, newMemberWeight)
             self.IDCounter += 1
-    
+
     def isNextMember(self):
         return True if (len(self.populationToCheck) > 0) else False
     
@@ -136,7 +134,7 @@ class Genetics(object):
         
         return newWeights
     
-    '''
+        '''
         Old cross over ass average
         '''
         # newWeights = []
