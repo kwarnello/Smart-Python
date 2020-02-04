@@ -28,7 +28,7 @@ class Info(object):
         Dummy inputs creation
         '''
         
-        inputs = np.zeros([1, 6])
+        inputs = np.zeros([1, 8])
         
         snakePosition = snake.snakeElements
         x, y = snakePosition[0]
@@ -43,8 +43,6 @@ class Info(object):
         if len(n) == 0:
             n = [y / self.sizeOfBoard, 0, 1]
         inputs[0][0] = n[0]
-        #inputs[0][1] = n[1]
-        #inputs[0][2] = n[2]
 
         # South
         s = []
@@ -56,8 +54,6 @@ class Info(object):
         if len(s) == 0:
             s = [(self.sizeOfBoard - y) / self.sizeOfBoard, 0, 1]
         inputs[0][1] = s[0]
-        #inputs[0][4] = s[1]
-        #inputs[0][5] = s[2]
 
         # West
         w = []
@@ -69,8 +65,6 @@ class Info(object):
         if len(w) == 0:
             w = [x / self.sizeOfBoard, 0, 1]
         inputs[0][2] = w[0]
-        #inputs[0][7] = w[1]
-        #inputs[0][8] = w[2]
 
         # East
         e = []
@@ -82,11 +76,16 @@ class Info(object):
         if len(e) == 0:
             e = [(self.sizeOfBoard - x) / self.sizeOfBoard, 0, 1]
         inputs[0][3] = e[0]
-        #inputs[0][10] = e[1]
-        #inputs[0][11] = e[2]
 
         # Food
-        inputs[0][4] = (foodCoords[0] - x) / self.sizeOfBoard
-        inputs[0][5] = (foodCoords[1] - y) / self.sizeOfBoard
-        
+        xF, yF = foodCoords
+        if xF < x:
+            inputs[0][4] = 1 - ((xF - x) / self.sizeOfBoard)
+        elif xF > x:
+            inputs[0][5] = 1 - ((x - xF) / self.sizeOfBoard)
+        if yF < y:
+            inputs[0][6] = 1 - ((yF - y) / self.sizeOfBoard)
+        elif yF > y:
+            inputs[0][7] = 1 - ((y - yF) / self.sizeOfBoard)
+            
         return inputs

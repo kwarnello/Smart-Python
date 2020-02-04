@@ -10,7 +10,6 @@ import pickle
 
 from smartPython import GUI, snake, food, moveController, score, neuralNetwork, info, \
     genetics
-from click.exceptions import FileError
 
 
 class Main():
