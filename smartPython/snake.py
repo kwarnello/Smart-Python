@@ -13,7 +13,7 @@ class Snake(object):
     Class for snake
     '''
 
-    def __init__(self, main, length=3, maxStep=100):
+    def __init__(self, main, length=3, maxStep=1000):
         '''
         Create snake
         '''

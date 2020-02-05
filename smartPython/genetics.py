@@ -14,7 +14,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, populationSize=1000, percentageWeak=0.9, percentageChilds=0.88):
+    def __init__(self, populationSize=2000, percentageWeak=0.9, percentageChilds=0.88):
         '''
         Constructor
         '''
@@ -81,7 +81,7 @@ class Genetics(object):
             
     def createChild(self):
         '''
-        Create child based on random parents. Take on from begining of shuffle list and one from the end
+        Create child based on random parents. Take on from beginning of shuffle list and one from the end
         '''
         keys = list(self.population.keys())
         
@@ -118,9 +118,8 @@ class Genetics(object):
         '''
         weightA = memA.getWeights()
         weightB = memB.getWeights()
-        
         newWeights = []
-        for  i in range(len(weightA)):
+        for  i in range(len(weightA) // 2):
             temp = [0] * len(weightA[i])
             for j in range(len(weightA[i])):
                 temp_second = [0] * len(weightA[i][j])
@@ -131,6 +130,9 @@ class Genetics(object):
                         temp_second[k] = weightB[i][j][k]
                 temp[j] = list(temp_second)
             newWeights.append(np.array(temp))
+            
+        for  i in range(len(weightA) // 2):
+            newWeights.append(np.array([2 * np.random.rand() - 1 for _ in range(len(weightA[i][0]))]))
         
         return newWeights
     

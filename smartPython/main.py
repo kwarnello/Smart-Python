@@ -4,9 +4,9 @@ Created on 2 lut 2020
 @author: Warus
 '''
 
-import time
 import copy
 import pickle
+import time
 
 from smartPython import GUI, snake, food, moveController, score, neuralNetwork, info, \
     genetics

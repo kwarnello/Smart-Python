@@ -7,7 +7,6 @@ Created on 2 lut 2020
 import tensorflow as tf
 import numpy as np
 
-
 class NN(object):
     '''
     Class for Neural Network.
@@ -37,47 +36,35 @@ class NN(object):
         return self.model.predict(inputs)
     
     def setNewWeights(self, weights):
-        if len(weights) != 3:
+        if len(weights) != 6:
             print("ERRORRORORORO, wrong weights shape")
         
         for i, layer in enumerate(self.model.layers):
-            layer.set_weights([weights[i], np.zeros(self.zerosSize[i])])
+            layer.set_weights([weights[i], weights[i + 3]])
             
         tf.keras.backend.clear_session()
         
-    def getRandomWeights(self):
-        weightA = np.empty([self.inputs, self.first])
-        for i in range(self.inputs):
-            for j in range(self.first):
-                weightA[i][j] = 2 * np.random.rand() - 1
-        
-        weightB = np.empty([self.first, self.second])
-        for i in range(self.first):
-            for j in range(self.second):
-                weightB[i][j] = 2 * np.random.rand() - 1
-        
-        weightC = np.empty([self.second, self.outputs])
-        for i in range(self.second):
-            for j in range(self.outputs):
-                weightC[i][j] = 2 * np.random.rand() - 1
-        
-        return np.array([weightA, weightB, weightC])
+    def getRandomWeights(self): 
+        return getRandomWeights(self.inputs, self.first, self.second, self.outputs)
 
     
 def getRandomWeights(inputs=8, first=8, second=4, outputs=4):
     weightA = np.empty([inputs, first])
+    biasA = np.empty([first])
     for i in range(inputs):
         for j in range(first):
             weightA[i][j] = 2 * np.random.rand() - 1
-        
+            
     weightB = np.empty([first, second])
+    biasB = np.empty([second])
     for i in range(first):
         for j in range(second):
             weightB[i][j] = 2 * np.random.rand() - 1
         
     weightC = np.empty([second, outputs])
+    biasC = np.empty([outputs])
     for i in range(second):
         for j in range(outputs):
             weightC[i][j] = 2 * np.random.rand() - 1
         
-    return np.array([weightA, weightB, weightC])
+    return np.array([weightA, weightB, weightC, biasA, biasB, biasC])
