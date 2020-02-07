@@ -15,7 +15,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, populationSize=5000, percentageWeak=0.95, percentageChilds=0.945):
+    def __init__(self, populationSize=50, percentageWeak=0.95, percentageChilds=0.945):
         '''
         Constructor
         '''
@@ -50,36 +50,35 @@ class Genetics(object):
         self.killWeak()
         self.createChild()
         self.createGeneration()
-        pass
     
     def countStatistics(self):
         '''
         Get basic stats that decision about killing can be made
         '''
-        for v in self.population.values():
-            self.scorerStats.append(v.score)
-            
         self.ave = np.average(self.scorerStats)
         self.med = np.median(self.scorerStats)
         
         print("Generation {}".format(self.generationCounter))
         print(pd.Series(self.scorerStats).describe())
-        #print("Average {:.3f} +/- {:.3f}".format(self.ave, np.std(self.scorerStats)))
-        #print("Median {:.3f}".format(self.med))
         print()
 
     def killWeak(self):
         '''
-        Kill all that are weaker than median
+        Kill all that are weaker than median, then median + 1 and so on.
         '''
         iShouldKill = int(self.populationSize * self.percentageWeak)
         iKilled = 0
-        for k in list(self.population.keys()):
-            if self.population[k].score <= self.med:
-                del(self.population[k])
-                iKilled += 1
-            if iKilled >= iShouldKill:
-                break
+        minScore = self.med
+        shouldIKilling = True
+        while shouldIKilling:
+            for k in list(self.population.keys()):
+                if self.population[k].score <= minScore:
+                    del(self.population[k])
+                    iKilled += 1
+                if iKilled >= iShouldKill:
+                    shouldIKilling = False
+                    break
+            minScore += 1
             
     def createChild(self):
         '''
@@ -104,9 +103,20 @@ class Genetics(object):
         self.workerID = workingMember.ID
         return workingMember
     
+    def getBestMember(self):
+        '''
+        Get best member with highestscore in generation
+        '''
+        maxScore = np.max(self.scorerStats)
+        for k, v in self.population.items():
+            if v.score == maxScore:
+                print(self.population[k].score)
+                return self.population[k]
+    
     def putScore(self, score):
         if self.workerID != None:
             self.population[self.workerID].setScore(score)
+            self.scorerStats.append(score)
 
     def createMember(self, ID, weights=None):
         if weights == None:

@@ -4,12 +4,11 @@ Created on 2 lut 2020
 @author: Warus
 '''
 
-import copy
 import pickle
 import time
 
 from smartPython import GUI, snake, food, moveController, score, neuralNetwork, info, \
-    genetics
+    genetics, bestWeights
 
 
 class Main():
@@ -42,6 +41,12 @@ class Main():
                 print("Załadowałem")
         except FileNotFoundError:
             self.geneticsController = genetics.Genetics()
+            
+        try:
+            with open('best.pickle', 'rb') as f:
+                self.best = pickle.load(f)
+        except FileNotFoundError:
+            self.best = bestWeights.Best()
 
         # It has to be at the end on constructor
         self.mainFrame.startLoop()
@@ -59,6 +64,7 @@ class Main():
             self.geneticsController.putScore(self.score.getScore())
 
         if not self.geneticsController.isNextMember():
+            self.best.saveNextGeneration(self.geneticsController.getBestMember())
             self.geneticsController.newGeneration()
             self.printRaport()
             self.save()
@@ -98,6 +104,8 @@ class Main():
     def save(self):
         with open('model.pickle', 'wb') as f:
             pickle.dump(self.geneticsController, f)
+        with open('best.pickle', 'wb') as f:
+            pickle.dump(self.best, f)
 
     def printRaport(self):
         print("NN times ", self.time_nn / self.newGameCounter)
