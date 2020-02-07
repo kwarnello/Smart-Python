@@ -25,6 +25,7 @@ class Main():
     time_newGame = 0
     time_graphics = 0
     newGameCounter = 0
+    generation = 0
     
     def __init__(self):
         '''
@@ -34,6 +35,7 @@ class Main():
         self.score = score.Score()
         self.info = info.Info()
         self.NN = neuralNetwork.NN()
+        self.loadGame = False
         
         try:
             with open('model.pickle', 'rb') as f:
@@ -56,29 +58,34 @@ class Main():
         After losing generate new stuff
         If there is new member get it. If not generate new population.
         Reset score, create new snake and so on.
+        If load game just load best snakes one after one.
         '''
-        self.newGameCounter += 1
-        start = time.time()
-        
-        if self.newGameCounter != 1:
-            self.geneticsController.putScore(self.score.getScore())
-
-        if not self.geneticsController.isNextMember():
-            self.best.saveNextGeneration(self.geneticsController.getBestMember())
-            self.geneticsController.newGeneration()
-            self.printRaport()
-            self.save()
-
-        member = self.geneticsController.getNextMember()
-        
-        self.NN.setNewWeights(member.weights)
-        
-        self.snake = snake.Snake(self)
-        self.food = food.Food(self.snake)
-        
-        self.score.newGame()
-        # self.controller = moveController.Controller(self)
-        self.time_newGame += (time.time() - start) 
+        if self.loadGame:
+            self.loadBestSnakes()
+        else:
+            self.generation = self.geneticsController.generationCounter
+            self.newGameCounter += 1
+            start = time.time()
+            
+            if self.newGameCounter != 1:
+                self.geneticsController.putScore(self.score.getScore())
+    
+            if not self.geneticsController.isNextMember():
+                self.best.saveNextGeneration(self.geneticsController.getBestMember())
+                self.geneticsController.newGeneration()
+                self.printRaport()
+                self.save()
+    
+            member = self.geneticsController.getNextMember()
+            
+            self.NN.setNewWeights(member.weights)
+            
+            self.snake = snake.Snake(self)
+            self.food = food.Food(self.snake)
+            
+            self.score.newGame()
+            # self.controller = moveController.Controller(self)
+            self.time_newGame += (time.time() - start) 
 
     def startMainLoop(self):
         '''
@@ -101,9 +108,28 @@ class Main():
             time.sleep(self.SLEEPING_TIME / 1000)
         # self.startMainLoop()
     
+    def loadBestSnakes(self):
+        '''
+        Load best snakes for each generations from best.pickle file
+        '''
+        self.SLEEPING_TIME = 70
+        self.loadGame = True
+        try:
+            bestMember = self.best.getNextGeneration()
+            self.generation = self.best.getter
+            self.NN.setNewWeights(bestMember.weights)
+            self.snake = snake.Snake(self)
+            self.food = food.Food(self.snake)
+        except Exception:
+            self.running = False
+            self.mainFrame.flushAfterLoad()
+            self.mainFrame.firstScreen()
+            self.SLEEPING_TIME = 0
+            
     def save(self):
         with open('model.pickle', 'wb') as f:
             pickle.dump(self.geneticsController, f)
+            
         with open('best.pickle', 'wb') as f:
             pickle.dump(self.best, f)
 

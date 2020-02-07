@@ -62,7 +62,8 @@ class MainFrame(object):
         tkinter.Button(self.root,
                         text='Load',
                         width=self.BUTTON_WIDTH,
-                        borderwidth=self.BORDER_WIDTH).place(relx=0.38, rely=0.46)
+                        borderwidth=self.BORDER_WIDTH,
+                        command=self.loadGame).place(relx=0.38, rely=0.46)
         
         tkinter.Button(self.root,
                         text='Options',
@@ -84,7 +85,16 @@ class MainFrame(object):
         self.root.after(10, self.main.startMainLoop)
     
     def loadGame(self):
-        pass
+        for widget in self.root.winfo_children():
+            widget.destroy()
+            
+        self.main.loadBestSnakes()
+        self.initializeGameScreen()
+        self.root.after(10, self.main.startMainLoop)
+        
+    def flushAfterLoad(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
     
     def options(self):
         pass
@@ -154,7 +164,7 @@ class MainFrame(object):
         
         self.highscoreLabel.config(text="Highscore: " + str(self.main.score.getHighscore()))
         self.scoreLabel.config(text="Score: " + str(self.main.score.getScore()))
-        self.generationLabel.config(text="Generation: " + str(self.main.geneticsController.generationCounter))
+        self.generationLabel.config(text="Generation: " + str(self.main.generation))
         self.snakeLabel.config(text="Snake: {} ({})".format(self.main.geneticsController.getMemberCount(), self.main.geneticsController.populationSize))
         
         self.root.update()

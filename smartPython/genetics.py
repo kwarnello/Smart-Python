@@ -15,7 +15,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, populationSize=50, percentageWeak=0.95, percentageChilds=0.945):
+    def __init__(self, populationSize=3000, percentageWeak=0.95, percentageChilds=0.945):
         '''
         Constructor
         '''
@@ -110,7 +110,6 @@ class Genetics(object):
         maxScore = np.max(self.scorerStats)
         for k, v in self.population.items():
             if v.score == maxScore:
-                print(self.population[k].score)
                 return self.population[k]
     
     def putScore(self, score):
