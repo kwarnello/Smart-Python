@@ -5,6 +5,7 @@ Created on 2 lut 2020
 '''
 import copy
 import numpy as np
+import pandas as pd
 
 from smartPython import member, neuralNetwork
 
@@ -14,7 +15,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, populationSize=1000, percentageWeak=0.9, percentageChilds=0.88):
+    def __init__(self, populationSize=5000, percentageWeak=0.95, percentageChilds=0.945):
         '''
         Constructor
         '''
@@ -62,8 +63,9 @@ class Genetics(object):
         self.med = np.median(self.scorerStats)
         
         print("Generation {}".format(self.generationCounter))
-        print("Average {:.3f} +/- {:.3f}".format(self.ave, np.std(self.scorerStats)))
-        print("Median {:.3f}".format(self.med))
+        print(pd.Series(self.scorerStats).describe())
+        #print("Average {:.3f} +/- {:.3f}".format(self.ave, np.std(self.scorerStats)))
+        #print("Median {:.3f}".format(self.med))
         print()
 
     def killWeak(self):
