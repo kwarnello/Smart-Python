@@ -5,7 +5,6 @@ Created on 1 lut 2020
 '''
 
 import tkinter
-from astropy.wcs.docstrings import coord
 
 
 class MainFrame(object):
@@ -29,6 +28,7 @@ class MainFrame(object):
         Constructor
         '''
         self.main = main
+        self.canvasExists = False
         
         self.root = tkinter.Tk()
         
@@ -47,6 +47,7 @@ class MainFrame(object):
         self.root.title("Smart Python")
         
         self.root.configure(bg='black')
+        self.canvas = tkinter.Canvas(self.root)
 
         self.firstScreen()
         
@@ -111,11 +112,10 @@ class MainFrame(object):
         '''        
         self.placeForSnake = (20, 10, self.SNAKE_PLACE_SIZE + 20, self.SNAKE_PLACE_SIZE + 10)
         self.placeForNeurons = (self.SNAKE_PLACE_SIZE + 30, 10, 1080, self.SNAKE_PLACE_SIZE + 10)
-        
+                
         self.canvas = tkinter.Canvas(self.root)
         self.canvas.create_rectangle(self.placeForSnake, outline='white')
         
-        # self.canvas.create_rectangle(self.placeForNeurons, outline='white')
         self.canvas.configure(bg='black')
         
         self.highscoreLabel = tkinter.Label(self.root, text="Highscore: 0", bg="Black", foreground="White")
@@ -133,6 +133,9 @@ class MainFrame(object):
         
         self.drawSnake()
         self.drawFood()
+        
+        # ## dummy implementation for draw connection fixed
+        self.canvasExists = True
         
     def drawSnake(self):
         '''
@@ -197,8 +200,21 @@ class MainFrame(object):
                                v[1][1] + ovalDiameter // 2,
                                nextNeuronsCoord[0],
                                nextNeuronsCoord[1] + ovalDiameter // 2)
-                self.connections[(n, x, n + 1, y)] = self.canvas.create_line(coordinates, fill="green", width=0.5, smooth=True)
+                self.connections[(k[0], k[1], k[0] + 1, x)] = self.canvas.create_line(coordinates, fill="green", width=0.5, smooth=True)
+    
+    def updateNeurons(self, inputs, outputs):
 
+        def clamp(x): 
+            return max(0, min(x, 255))
+
+        for index, input in enumerate(inputs[0]):
+            color = "#{0:02x}{1:02x}{2:02x}".format(0, clamp(int(255 * input)), 0)
+            self.canvas.itemconfig(self.neurons[(0, index)][0], fill=color)
+        
+        for index, output in enumerate(outputs[0]):
+            color = "#{0:02x}{1:02x}{2:02x}".format(0, clamp(int(255 * output)), 0)
+            self.canvas.itemconfig(self.neurons[(2, index)][0], fill=color)
+            
     def update(self):
         '''
         Update snake frame and after that redraw everything
@@ -208,30 +224,32 @@ class MainFrame(object):
         self.drawSnake()
         self.drawFood()
         
-        self.highscoreLabel.config(text="Highscore: " + str(self.main.score.getHighscore()))
         self.scoreLabel.config(text="Score: " + str(self.main.score.getScore()))
-        self.generationLabel.config(text="Generation: " + str(self.main.generation))
-        self.snakeLabel.config(text="Snake: {} ({})".format(self.main.geneticsController.getMemberCount(), self.main.geneticsController.populationSize))
         
         self.root.update()
         
+    def updateNewSnake(self, weights):
+        if self.canvasExists:
+            self.generationLabel.config(text="Generation: " + str(self.main.generation))
+            self.snakeLabel.config(text="Snake: {} ({})".format(self.main.geneticsController.getMemberCount(), self.main.geneticsController.populationSize))
+            self.highscoreLabel.config(text="Highscore: " + str(self.main.score.getHighscore()))
+            
+            self.updateConections(weights)
+
     def updateConections(self, weights):
-        
-        pass
-        
-    def updateNeurons(self, inputs, outputs):
 
         def clamp(x): 
             return max(0, min(x, 255))
 
-        print(inputs)
-        for index, input in enumerate(inputs[0]):
-            color = "#{0:02x}{1:02x}{2:02x}".format(0, clamp(int(255 * input)), 0)
-            self.canvas.itemconfig(self.neurons[(0, index)][0], fill=color)
-        
-        for index, output in enumerate(outputs[0]):
-            color = "#{0:02x}{1:02x}{2:02x}".format(0, clamp(int(255 * output)), 0)
-            self.canvas.itemconfig(self.neurons[(2, index)][0], fill=color)
+        for layer in range(2):
+            for i1, x in enumerate(weights[layer]):
+                for i2, y in enumerate(x):
+                    if y < 0:
+                        y = abs(y)
+                        color = "#{0:02x}{1:02x}{2:02x}".format(clamp(int(255 * y)), 0, clamp(int(134 * y)))
+                    else:
+                        color = "#{0:02x}{1:02x}{2:02x}".format(clamp(int(12 * y)), 0, clamp(int(255 * y)))                 
+                    self.canvas.itemconfig(self.connections[(layer, i1, layer + 1, i2)], fill=color, width=4 * y)
 
     def getSizeOfBoard(self):
         return getSizeOfBoard()

@@ -15,7 +15,7 @@ class Main():
     '''
     Main class handles everything
     '''
-    SLEEPING_TIME = 1000  # in millis
+    SLEEPING_TIME = 0  # in millis
     
     running = True
     
@@ -77,10 +77,9 @@ class Main():
     
             member = self.geneticsController.getNextMember()
             
-            self.mainFrame.updateConections(member.weights)
-            
             self.NN.setNewWeights(member.weights)
-            
+            self.mainFrame.updateNewSnake(member.weights)
+
             self.snake = snake.Snake(self)
             self.food = food.Food(self.snake)
             
