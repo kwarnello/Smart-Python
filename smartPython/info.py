@@ -37,8 +37,8 @@ class Info(object):
         n = []
         for i in np.arange(y - 1, -1, -1):
             if (x, i) in snakePosition:
-                dist = 1 - (i - y) / self.sizeOfBoard
-                n = [abs(dist), 1, 0]
+                dist = 1 - abs((i - y) / self.sizeOfBoard)
+                n = [dist, 1, 0]
                 break
         if len(n) == 0:
             n = [y / self.sizeOfBoard, 0, 1]
@@ -48,8 +48,8 @@ class Info(object):
         s = []
         for i in range(y + 1, self.sizeOfBoard + 1):
             if (x, i) in snakePosition:
-                dist = 1 - (i - y) / self.sizeOfBoard
-                s = [abs(dist), 1, 0]
+                dist = 1 - abs((i - y) / self.sizeOfBoard)
+                s = [dist, 1, 0]
                 break
         if len(s) == 0:
             s = [(self.sizeOfBoard - y) / self.sizeOfBoard, 0, 1]
@@ -59,8 +59,8 @@ class Info(object):
         w = []
         for i in range(x, 0, -1):
             if (i, y) in snakePosition:
-                dist = 1 - (x - i) / self.sizeOfBoard
-                w = [abs(dist), 1, 0]
+                dist = 1 - abs((x - i) / self.sizeOfBoard)
+                w = [dist, 1, 0]
                 break
         if len(w) == 0:
             w = [x / self.sizeOfBoard, 0, 1]
@@ -70,8 +70,8 @@ class Info(object):
         e = []
         for i in range(x + 1, self.sizeOfBoard + 1):
             if (i, y) in snakePosition:
-                dist = 1 - (x - i) / self.sizeOfBoard
-                e = [abs(dist), 1, 0]
+                dist = 1 - abs((x - i) / self.sizeOfBoard)
+                e = [dist, 1, 0]
                 break
         if len(e) == 0:
             e = [(self.sizeOfBoard - x) / self.sizeOfBoard, 0, 1]
