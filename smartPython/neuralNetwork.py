@@ -20,6 +20,7 @@ class NN(object):
         self.inputs = inputs
         self.first = first
         self.outputs = 4
+        self.size = [self.inputs, self.first, self.outputs]
         
         self.model = tf.keras.models.Sequential([
             tf.keras.layers.Dense(self.first, activation='relu', input_shape=(self.inputs,)),

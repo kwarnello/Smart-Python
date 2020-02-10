@@ -40,7 +40,6 @@ class Main():
         try:
             with open('model.pickle', 'rb') as f:
                 self.geneticsController = pickle.load(f)
-                print("Załadowałem")
         except FileNotFoundError:
             self.geneticsController = genetics.Genetics()
             
@@ -73,7 +72,7 @@ class Main():
             if not self.geneticsController.isNextMember():
                 self.best.saveNextGeneration(self.geneticsController.getBestMember())
                 self.geneticsController.newGeneration()
-                self.printRaport()
+                self.printReport()
                 self.save()
     
             member = self.geneticsController.getNextMember()
@@ -106,7 +105,6 @@ class Main():
             self.time_graphics += (time.time() - start)
     
             time.sleep(self.SLEEPING_TIME / 1000)
-        # self.startMainLoop()
     
     def loadBestSnakes(self):
         '''
@@ -133,7 +131,7 @@ class Main():
         with open('best.pickle', 'wb') as f:
             pickle.dump(self.best, f)
 
-    def printRaport(self):
+    def printReport(self):
         print("NN times ", self.time_nn / self.newGameCounter)
         print("Graphics times ", self.time_graphics / self.newGameCounter)
         print("Snake times ", self.time_snake / self.newGameCounter)

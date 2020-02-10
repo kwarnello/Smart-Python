@@ -5,6 +5,7 @@ Created on 1 lut 2020
 '''
 
 import tkinter
+from astropy.wcs.docstrings import coord
 
 
 class MainFrame(object):
@@ -125,7 +126,9 @@ class MainFrame(object):
         self.generationLabel.place(x=self.placeForNeurons[0], y=self.placeForNeurons[1] + 20)
         self.snakeLabel = tkinter.Label(self.root, text="Snake number: 0", bg="Black", foreground="White", font=(14))
         self.snakeLabel.place(x=self.placeForNeurons[0], y=self.placeForNeurons[1] + 40)
-        
+                
+        self.drawNN()
+
         self.canvas.pack(fill=tkinter.BOTH, expand=1)
         
         self.drawSnake()
@@ -136,29 +139,75 @@ class MainFrame(object):
         Draw snake based on list of its elements
         '''
         for part in self.main.snake.snakeElements:
-            self.canvas.create_rectangle(self.findRectangleCoordinates(part), fill='white', outline='black')
+            self.canvas.create_rectangle(self.findRectangleCoordinates(part), fill='white', outline='black', tags='refreshable')
             
     def drawFood(self):
         '''
         Draw snake based on list of its elements
         '''
-        self.canvas.create_rectangle(self.findRectangleCoordinates(self.main.food.position), fill='red', outline='black')
-        
+        self.canvas.create_rectangle(self.findRectangleCoordinates(self.main.food.position), fill='red', outline='black', tags='refreshable')
+     
     def findRectangleCoordinates(self, coordinates):
         a = self.placeForSnake[0] + coordinates[0] * self.SIZE_OF_ONE_CELL
         b = self.placeForSnake[1] + coordinates[1] * self.SIZE_OF_ONE_CELL
         c = a + self.SIZE_OF_ONE_CELL
         d = b + self.SIZE_OF_ONE_CELL
         return (a, b, c, d)
-    
+       
+    def drawNN(self):
+        '''
+        Draw base for NN (neurons, connections etc.).
+        Firstly create dict with brain structure
+        '''
+        # ## Oval size, padding and so on
+        ovalDiameter = 45
+        
+        paddingTop = 15
+        paddingLeft = 15
+        
+        hPaddingBetweenNeurons = 80
+        vPaddingBetweenNeurons = 25
+
+        modelSize = self.main.NN.size
+        self.connections = {}
+        self.neurons = {}
+
+        #### Create neurons. Simplest calculation of coordinates (no border parameter detections!)
+        for n in range(len(modelSize)):
+            # ## Find padding that layer is in the center
+            paddingTopForLayer = (modelSize[n] * ((abs(self.placeForNeurons[1] - self.placeForNeurons[3]) // modelSize[n]) - ovalDiameter - vPaddingBetweenNeurons)) // 2
+            for y in range(modelSize[n]): 
+                xCoor = self.placeForNeurons[0] + n * (ovalDiameter + hPaddingBetweenNeurons) + paddingLeft
+                yCoor = self.placeForNeurons[1] + y * (ovalDiameter + vPaddingBetweenNeurons) + paddingTop + paddingTopForLayer
+                coordinates = (xCoor,
+                               yCoor,
+                               xCoor + ovalDiameter,
+                               yCoor + ovalDiameter)
+                self.neurons[(n, y)] = [self.canvas.create_oval(coordinates, fill='white', outline='white'), (xCoor, yCoor)]  # ## store each neurons as ID and coordinates
+                
+        # self.canvas.itemconfig(self.neurons[(0, 1)], fill='#810101')
+        
+        #### Create connections. Simplest calculation of coordinates (no border parameter detections!)
+        for k, v in self.neurons.items():
+            if k[0] == 2:
+                break
+            
+            # ## iterate through each neuron in next layer and to create connections
+            for x in range(modelSize[k[0] + 1]):
+                nextNeuronsCoord = self.neurons[(k[0] + 1, x)][1]
+                print(nextNeuronsCoord)
+                coordinates = (v[1][0] + ovalDiameter,
+                               v[1][1] + ovalDiameter // 2,
+                               nextNeuronsCoord[0],
+                               nextNeuronsCoord[1] + ovalDiameter // 2)
+                self.connections[(n, x, n + 1, y)] = self.canvas.create_line(coordinates, fill="green")
+
     def update(self):
         '''
         Update snake frame and after that redraw everything
         '''
-        self.canvas.delete("all")
+        self.canvas.delete('refreshable')
             
-        self.canvas.create_rectangle(self.placeForSnake, outline='white', fill="black")
-        
         self.drawSnake()
         self.drawFood()
         
