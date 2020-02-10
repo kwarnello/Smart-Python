@@ -15,7 +15,7 @@ class Main():
     '''
     Main class handles everything
     '''
-    SLEEPING_TIME = 0  # in millis
+    SLEEPING_TIME = 1000  # in millis
     
     running = True
     
@@ -77,6 +77,8 @@ class Main():
     
             member = self.geneticsController.getNextMember()
             
+            self.mainFrame.updateConections(member.weights)
+            
             self.NN.setNewWeights(member.weights)
             
             self.snake = snake.Snake(self)
@@ -102,6 +104,7 @@ class Main():
             
             start = time.time()
             self.mainFrame.update()
+            self.mainFrame.updateNeurons(inputs, decision)
             self.time_graphics += (time.time() - start)
     
             time.sleep(self.SLEEPING_TIME / 1000)
@@ -115,6 +118,7 @@ class Main():
         try:
             bestMember = self.best.getNextGeneration()
             self.generation = self.best.getter
+            self.mainFrame.updateConections(bestMember.weights)
             self.NN.setNewWeights(bestMember.weights)
             self.snake = snake.Snake(self)
             self.food = food.Food(self.snake)

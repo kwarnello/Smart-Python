@@ -183,10 +183,8 @@ class MainFrame(object):
                                yCoor,
                                xCoor + ovalDiameter,
                                yCoor + ovalDiameter)
-                self.neurons[(n, y)] = [self.canvas.create_oval(coordinates, fill='white', outline='white'), (xCoor, yCoor)]  # ## store each neurons as ID and coordinates
+                self.neurons[(n, y)] = [self.canvas.create_oval(coordinates, fill='black', outline='white'), (xCoor, yCoor)]  # ## store each neurons as ID and coordinates
                 
-        # self.canvas.itemconfig(self.neurons[(0, 1)], fill='#810101')
-        
         #### Create connections. Simplest calculation of coordinates (no border parameter detections!)
         for k, v in self.neurons.items():
             if k[0] == 2:
@@ -195,12 +193,11 @@ class MainFrame(object):
             # ## iterate through each neuron in next layer and to create connections
             for x in range(modelSize[k[0] + 1]):
                 nextNeuronsCoord = self.neurons[(k[0] + 1, x)][1]
-                print(nextNeuronsCoord)
                 coordinates = (v[1][0] + ovalDiameter,
                                v[1][1] + ovalDiameter // 2,
                                nextNeuronsCoord[0],
                                nextNeuronsCoord[1] + ovalDiameter // 2)
-                self.connections[(n, x, n + 1, y)] = self.canvas.create_line(coordinates, fill="green")
+                self.connections[(n, x, n + 1, y)] = self.canvas.create_line(coordinates, fill="green", width=0.5, smooth=True)
 
     def update(self):
         '''
@@ -218,6 +215,24 @@ class MainFrame(object):
         
         self.root.update()
         
+    def updateConections(self, weights):
+        
+        pass
+        
+    def updateNeurons(self, inputs, outputs):
+
+        def clamp(x): 
+            return max(0, min(x, 255))
+
+        print(inputs)
+        for index, input in enumerate(inputs[0]):
+            color = "#{0:02x}{1:02x}{2:02x}".format(0, clamp(int(255 * input)), 0)
+            self.canvas.itemconfig(self.neurons[(0, index)][0], fill=color)
+        
+        for index, output in enumerate(outputs[0]):
+            color = "#{0:02x}{1:02x}{2:02x}".format(0, clamp(int(255 * output)), 0)
+            self.canvas.itemconfig(self.neurons[(2, index)][0], fill=color)
+
     def getSizeOfBoard(self):
         return getSizeOfBoard()
 
