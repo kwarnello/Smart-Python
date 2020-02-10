@@ -210,7 +210,7 @@ class MainFrame(object):
         for index, input in enumerate(inputs[0]):
             color = "#{0:02x}{1:02x}{2:02x}".format(0, clamp(int(255 * input)), 0)
             self.canvas.itemconfig(self.neurons[(0, index)][0], fill=color)
-        
+        print(outputs)
         for index, output in enumerate(outputs[0]):
             color = "#{0:02x}{1:02x}{2:02x}".format(0, clamp(int(255 * output)), 0)
             self.canvas.itemconfig(self.neurons[(2, index)][0], fill=color)
