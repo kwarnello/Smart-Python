@@ -15,7 +15,7 @@ class Main():
     '''
     Main class handles everything
     '''
-    SLEEPING_TIME = 0  # in millis
+    SLEEPING_TIME = 2000  # in millis
     
     running = True
     
@@ -94,6 +94,7 @@ class Main():
         while self.running:
             start = time.time()
             inputs = self.info.getAllInfo(self.snake, self.food.position)
+            print(inputs)
             decision = self.NN.predict(inputs)
             self.time_nn += (time.time() - start)
             

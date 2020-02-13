@@ -15,7 +15,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, populationSize=3000, percentageWeak=0.95, percentageChilds=0.945):
+    def __init__(self, populationSize=5000, percentageWeak=0.9, percentageMutations=0.005, percentageNewInPopulation=0.005):
         '''
         Constructor
         '''
@@ -32,7 +32,9 @@ class Genetics(object):
         self.scorerStats = []
         
         self.percentageWeak = percentageWeak
-        self.percentageChilds = percentageChilds
+        self.percentageNewInGeneration = percentageNewInPopulation  # ## percentage of new element in population random in 100%
+        self.percentageMutations = percentageMutations
+        self.percentageChild = 1 - self.percentageWeak - self.percentageNewInGeneration 
         
         self.createGeneration()
 
@@ -135,7 +137,11 @@ class Genetics(object):
             for j in range(len(weightA[i])):
                 temp_second = [0] * len(weightA[i][j])
                 for k in range(len(weightA[i][j])):
-                    if np.random.rand() > 0.5:
+                    randomNumber = np.random.rand()
+                    # ## check if genome should mutate else inhert from random parent
+                    if randomNumber < self.percentageMutations / 2 or randomNumber > self.percentageMutations / 2:
+                        temp_second[k] = 2 * np.random.rand() - 1
+                    elif np.random.rand() > 0.5:
                         temp_second[k] = weightA[i][j][k]
                     else:
                         temp_second[k] = weightB[i][j][k]
@@ -148,7 +154,7 @@ class Genetics(object):
         return newWeights
     
         '''
-        Old cross over ass average
+        Old cross over as average
         '''
         # newWeights = []
         # for i in range(len(weightA)):
@@ -158,9 +164,6 @@ class Genetics(object):
         #        temp[j] = list(ave)
                 
         #    newWeights.append(np.array(temp))
-
-    def mutate(self, member):
-        return member
 
     def fitness(self, member):  
         return member.score

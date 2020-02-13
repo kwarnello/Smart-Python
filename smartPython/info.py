@@ -24,8 +24,7 @@ class Info(object):
         '''
         Inputs as follows: first distance (normalized between 0 and size of board), second snake, third wall.
         0 - North, 1 - South, 2 - West, 3 - East, 4-7 - vector to the food
-        
-        Dummy inputs creation
+        Distance is squared to get bigger impact for closer walls
         '''
         
         inputs = np.zeros([1, 8])
@@ -34,58 +33,64 @@ class Info(object):
         x, y = snakePosition[0]
         
         # North
-        n = []
+        n = 0
         for i in np.arange(y - 1, -1, -1):
             if (x, i) in snakePosition:
-                dist = 1 - abs((i - y) / self.sizeOfBoard)
-                n = [dist, 1, 0]
+                n = (1 - abs((i - y - 1) / self.sizeOfBoard)) ** 2
                 break
-        if len(n) == 0:
-            n = [y / self.sizeOfBoard, 0, 1]
-        inputs[0][0] = n[0]
+        if n == 0:
+            n = (1 - (y / self.sizeOfBoard)) ** 2
+        inputs[0][0] = n
 
         # South
-        s = []
+        s = 0
         for i in range(y + 1, self.sizeOfBoard + 1):
             if (x, i) in snakePosition:
-                dist = 1 - abs((i - y) / self.sizeOfBoard)
-                s = [dist, 1, 0]
+                s = (1 - abs((i - y - 1) / self.sizeOfBoard)) ** 2
                 break
-        if len(s) == 0:
-            s = [(self.sizeOfBoard - y) / self.sizeOfBoard, 0, 1]
-        inputs[0][1] = s[0]
+        if s == 0:
+            s = (1 - (self.sizeOfBoard - y) / self.sizeOfBoard) ** 2
+        inputs[0][1] = s
 
         # West
-        w = []
-        for i in range(x, 0, -1):
+        w = 0
+        for i in range(x - 1, -1, -1):
             if (i, y) in snakePosition:
-                dist = 1 - abs((x - i) / self.sizeOfBoard)
-                w = [dist, 1, 0]
+                w = (1 - abs((x - i - 1) / self.sizeOfBoard)) ** 2
                 break
-        if len(w) == 0:
-            w = [x / self.sizeOfBoard, 0, 1]
-        inputs[0][2] = w[0]
+        if w == 0:
+            w = (1 - x / self.sizeOfBoard) ** 2
+        inputs[0][2] = w
 
         # East
-        e = []
+        e = 0
         for i in range(x + 1, self.sizeOfBoard + 1):
             if (i, y) in snakePosition:
-                dist = 1 - abs((x - i) / self.sizeOfBoard)
-                e = [dist, 1, 0]
+                e = (1 - abs((x - i - 1) / self.sizeOfBoard)) ** 2
                 break
-        if len(e) == 0:
-            e = [(self.sizeOfBoard - x) / self.sizeOfBoard, 0, 1]
-        inputs[0][3] = e[0]
+        if e == 0:
+            e = (1 - (self.sizeOfBoard - x) / self.sizeOfBoard) ** 2
+        inputs[0][3] = e
 
         # Food
         xF, yF = foodCoords
-        if xF < x:
+        if xF == x:
+            inputs[0][4] = 1
+            inputs[0][5] = 1
+        elif xF < x:
             inputs[0][4] = 1 - ((x - xF) / self.sizeOfBoard)
+            inputs[0][5] = -1
         elif xF > x:
+            inputs[0][4] = -1
             inputs[0][5] = 1 - ((xF - x) / self.sizeOfBoard)
-        if yF < y:
+        if yF == y:
+            inputs[0][6] = 1
+            inputs[0][7] = 1
+        elif yF < y:
             inputs[0][6] = 1 - ((y - yF) / self.sizeOfBoard)
+            inputs[0][7] = -1
         elif yF > y:
+            inputs[0][6] = -1
             inputs[0][7] = 1 - ((yF - y) / self.sizeOfBoard)
             
         return inputs
