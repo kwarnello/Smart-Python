@@ -15,7 +15,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, populationSize=5000, percentageWeak=0.9, percentageMutations=0.005, percentageNewInPopulation=0.005):
+    def __init__(self, populationSize=10, percentageWeak=0.9, percentageMutations=0.001, percentageNewInPopulation=0.005):
         '''
         Constructor
         '''
@@ -32,9 +32,8 @@ class Genetics(object):
         self.scorerStats = []
         
         self.percentageWeak = percentageWeak
-        self.percentageNewInGeneration = percentageNewInPopulation  # ## percentage of new element in population random in 100%
         self.percentageMutations = percentageMutations
-        self.percentageChild = 1 - self.percentageWeak - self.percentageNewInGeneration 
+        self.percentageChilds = percentageWeak - percentageNewInPopulation
         
         self.createGeneration()
 
@@ -46,7 +45,7 @@ class Genetics(object):
             
         self.populationToCheck = copy.deepcopy(list(self.population.values()))
         self.scorerStats = []
-        
+
     def newGeneration(self):
         self.countStatistics()
         self.killWeak()
@@ -81,22 +80,22 @@ class Genetics(object):
                     shouldIKilling = False
                     break
             minScore += 1
-            
+
     def createChild(self):
         '''
         Create child based on random parents. Take on from beginning of shuffle list and one from the end
         '''
         keys = list(self.population.keys())
-        
         for _ in range(int(self.populationSize * self.percentageChilds)):
             i, j = np.random.choice(keys), np.random.choice(keys)
+            print(i, j)
             newMemberWeight = self.crossover(self.population[i], self.population[j])
             self.population[self.IDCounter] = self.createMember(self.IDCounter, newMemberWeight)
             self.IDCounter += 1
 
     def isNextMember(self):
         return True if (len(self.populationToCheck) > 0) else False
-    
+                                                                                                                                                                                                                                                                                                                                                                                                                                    
     def getNextMember(self):
         '''
         Get next member and save its ID
@@ -107,7 +106,7 @@ class Genetics(object):
     
     def getBestMember(self):
         '''
-        Get best member with highestscore in generation
+        Get best member with highest score in generation
         '''
         maxScore = np.max(self.scorerStats)
         for k, v in self.population.items():
@@ -139,18 +138,28 @@ class Genetics(object):
                 for k in range(len(weightA[i][j])):
                     randomNumber = np.random.rand()
                     # ## check if genome should mutate else inhert from random parent
-                    if randomNumber < self.percentageMutations / 2 or randomNumber > self.percentageMutations / 2:
+                    if randomNumber < self.percentageMutations / 2 or randomNumber > (1 - self.percentageMutations / 2):
                         temp_second[k] = 2 * np.random.rand() - 1
-                    elif np.random.rand() > 0.5:
+                    elif randomNumber > 0.5:
                         temp_second[k] = weightA[i][j][k]
                     else:
                         temp_second[k] = weightB[i][j][k]
                 temp[j] = list(temp_second)
             newWeights.append(np.array(temp))
-            
-        for  i in range(len(weightA) // 2):
-            newWeights.append(np.array([2 * np.random.rand() - 1 for _ in range(len(weightA[i][0]))]))
         
+        for  i in range(len(weightA) // 2, len(weightA)):
+            bias = [0] * len(weightA[i])
+            for j in range(len(weightA[i])):
+                randomNumber = np.random.rand()
+                # ## check if genome should mutate else inhert from random parent
+                if randomNumber < self.percentageMutations / 2 or randomNumber > (1 - self.percentageMutations / 2):
+                    bias[j] = 2 * np.random.rand() - 1
+                elif randomNumber > 0.5:
+                    bias[j] = weightA[i][j]
+                else:
+                    bias[j] = weightB[i][j]
+            newWeights.append(np.array(bias))
+            
         return newWeights
     
         '''

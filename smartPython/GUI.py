@@ -209,8 +209,6 @@ class MainFrame(object):
             return max(0, min(x, 255))
 
         for index, input in enumerate(inputs[0]):
-            if input < 0 or input > 1:
-                print(inputs)
             color = "#{0:02x}{1:02x}{2:02x}".format(0, clamp(int(255 * input)), 0)
             self.canvas.itemconfig(self.neurons[(0, index)][0], fill=color)
 

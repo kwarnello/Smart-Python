@@ -33,64 +33,55 @@ class Info(object):
         x, y = snakePosition[0]
         
         # North
-        n = 0
+        n = -1
         for i in np.arange(y - 1, -1, -1):
             if (x, i) in snakePosition:
-                n = (1 - abs((i - y - 1) / self.sizeOfBoard)) ** 2
+                n = abs((y - i - 1) / self.sizeOfBoard)
                 break
-        if n == 0:
-            n = (1 - (y / self.sizeOfBoard)) ** 2
+        if n == -1:
+            n = y / self.sizeOfBoard
         inputs[0][0] = n
 
         # South
-        s = 0
+        s = -1
         for i in range(y + 1, self.sizeOfBoard + 1):
             if (x, i) in snakePosition:
-                s = (1 - abs((i - y - 1) / self.sizeOfBoard)) ** 2
+                s = abs(y - i + 1) / self.sizeOfBoard
                 break
-        if s == 0:
-            s = (1 - (self.sizeOfBoard - y) / self.sizeOfBoard) ** 2
+        if s == -1:
+            s = (self.sizeOfBoard - y - 1) / self.sizeOfBoard
         inputs[0][1] = s
 
         # West
-        w = 0
+        w = -1
         for i in range(x - 1, -1, -1):
             if (i, y) in snakePosition:
-                w = (1 - abs((x - i - 1) / self.sizeOfBoard)) ** 2
+                w = abs(x - i - 1) / self.sizeOfBoard
                 break
-        if w == 0:
-            w = (1 - x / self.sizeOfBoard) ** 2
+        if w == -1:
+            w = x / self.sizeOfBoard
         inputs[0][2] = w
 
         # East
-        e = 0
+        e = -1
         for i in range(x + 1, self.sizeOfBoard + 1):
             if (i, y) in snakePosition:
-                e = (1 - abs((x - i - 1) / self.sizeOfBoard)) ** 2
+                e = abs(x - i + 1) / self.sizeOfBoard
                 break
-        if e == 0:
-            e = (1 - (self.sizeOfBoard - x) / self.sizeOfBoard) ** 2
+        if e == -1:
+            e = (self.sizeOfBoard - x - 1) / self.sizeOfBoard
         inputs[0][3] = e
 
         # Food
         xF, yF = foodCoords
-        if xF == x:
-            inputs[0][4] = 1
-            inputs[0][5] = 1
-        elif xF < x:
-            inputs[0][4] = 1 - ((x - xF) / self.sizeOfBoard)
-            inputs[0][5] = -1
+        
+        if xF < x:
+            inputs[0][4] = (x - xF) / self.sizeOfBoard
         elif xF > x:
-            inputs[0][4] = -1
-            inputs[0][5] = 1 - ((xF - x) / self.sizeOfBoard)
-        if yF == y:
-            inputs[0][6] = 1
-            inputs[0][7] = 1
-        elif yF < y:
-            inputs[0][6] = 1 - ((y - yF) / self.sizeOfBoard)
-            inputs[0][7] = -1
+            inputs[0][5] = (xF - x) / self.sizeOfBoard
+        if yF < y:
+            inputs[0][6] = (y - yF) / self.sizeOfBoard
         elif yF > y:
-            inputs[0][6] = -1
-            inputs[0][7] = 1 - ((yF - y) / self.sizeOfBoard)
+            inputs[0][7] = (yF - y) / self.sizeOfBoard
             
         return inputs
