@@ -15,7 +15,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, populationSize=10, percentageWeak=0.9, percentageMutations=0.001, percentageNewInPopulation=0.005):
+    def __init__(self, populationSize=2000, percentageWeak=0.9, percentageMutations=0.0005, percentageNewInPopulation=0.005):
         '''
         Constructor
         '''
@@ -54,7 +54,7 @@ class Genetics(object):
     
     def countStatistics(self):
         '''
-        Get basic stats that decision about killing can be made
+        Get basic stats. Based on that decision about killing is made
         '''
         self.ave = np.average(self.scorerStats)
         self.med = np.median(self.scorerStats)
@@ -69,29 +69,28 @@ class Genetics(object):
         '''
         iShouldKill = int(self.populationSize * self.percentageWeak)
         iKilled = 0
+        
         minScore = self.med
-        shouldIKilling = True
-        while shouldIKilling:
+        while True:
             for k in list(self.population.keys()):
                 if self.population[k].score <= minScore:
                     del(self.population[k])
                     iKilled += 1
-                if iKilled >= iShouldKill:
-                    shouldIKilling = False
-                    break
+            if iKilled >= iShouldKill:
+                break
             minScore += 1
 
     def createChild(self):
         '''
-        Create child based on random parents. Take on from beginning of shuffle list and one from the end
+        Create child based on random parents. Take on from beginning of shuffle list and one from the end.
         '''
         keys = list(self.population.keys())
-        for _ in range(int(self.populationSize * self.percentageChilds)):
-            i, j = np.random.choice(keys), np.random.choice(keys)
-            print(i, j)
-            newMemberWeight = self.crossover(self.population[i], self.population[j])
-            self.population[self.IDCounter] = self.createMember(self.IDCounter, newMemberWeight)
-            self.IDCounter += 1
+        if len(keys) > 10:
+            for _ in range(int(self.populationSize * self.percentageChilds)):
+                i, j = np.random.choice(keys), np.random.choice(keys)
+                newMemberWeight = self.crossover(self.population[i], self.population[j])
+                self.population[self.IDCounter] = self.createMember(self.IDCounter, newMemberWeight)
+                self.IDCounter += 1
 
     def isNextMember(self):
         return True if (len(self.populationToCheck) > 0) else False
@@ -126,7 +125,7 @@ class Genetics(object):
 
     def crossover(self, memA, memB):
         '''
-        Old cross over ass average
+        Old cross over as average
         '''
         weightA = memA.getWeights()
         weightB = memB.getWeights()
@@ -146,20 +145,21 @@ class Genetics(object):
                         temp_second[k] = weightB[i][j][k]
                 temp[j] = list(temp_second)
             newWeights.append(np.array(temp))
-        
-        for  i in range(len(weightA) // 2, len(weightA)):
-            bias = [0] * len(weightA[i])
-            for j in range(len(weightA[i])):
-                randomNumber = np.random.rand()
-                # ## check if genome should mutate else inhert from random parent
-                if randomNumber < self.percentageMutations / 2 or randomNumber > (1 - self.percentageMutations / 2):
-                    bias[j] = 2 * np.random.rand() - 1
-                elif randomNumber > 0.5:
-                    bias[j] = weightA[i][j]
-                else:
-                    bias[j] = weightB[i][j]
-            newWeights.append(np.array(bias))
             
+        bias = np.zeros(len(weightA[2]))
+        for j in range(len(weightA[2])):
+            randomNumber = np.random.rand()
+            # ## check if genome should mutate else inhert from random parent
+            if randomNumber < self.percentageMutations / 2 or randomNumber > (1 - self.percentageMutations / 2):
+                bias[j] = 2 * np.random.rand() - 1
+            elif randomNumber > 0.5:
+                bias[j] = weightA[2][j]
+            else:
+                bias[j] = weightB[2][j]
+        newWeights.append(np.array(bias))
+        
+        newWeights.append(np.zeros(4,))
+
         return newWeights
     
         '''

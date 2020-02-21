@@ -13,7 +13,7 @@ class Snake(object):
     Class for snake
     '''
 
-    def __init__(self, main, length=3, maxStep=1000):
+    def __init__(self, main, length=3, maxStep=5000):
         '''
         Create snake
         '''
@@ -29,6 +29,10 @@ class Snake(object):
         self.steps = 0
         
         self.hasAte = False
+        
+        self.spinningAroundList = []
+        self.spinningAroundListOld = []
+        self.spinningCounter = 0
         
     def generateStartingSnake(self):
         '''
@@ -80,7 +84,7 @@ class Snake(object):
             self.gameOver()
         
         self.makeVelocityDecision(decision)
-        # print(decision)
+
         if self.velocity != (0, 0):
             if not self.hasAte:
                 self.snakeElements.pop()
@@ -114,6 +118,8 @@ class Snake(object):
             self.main.score.addScore()
         elif self.checkIfGameOver(newElement):
             self.gameOver()
+        elif self.spinningAround(newElement):
+            self.gameOver()
             
     def checkIfGameOver(self, newElement):
         size = self.main.mainFrame.getSizeOfBoard() - 1
@@ -131,3 +137,25 @@ class Snake(object):
     
     def gameOver(self):
         self.main.initializeNewGame()
+        
+    def spinningAround(self, newElement):
+        '''
+        Check if snake is not spinning around
+        '''
+        gameOver = False
+        self.spinningAroundList.append(newElement)
+        
+        if len(self.spinningAroundList) > 50:
+            self.spinningAroundList = []
+            self.spinningAroundListOld = []
+            self.spinningCounter = 0
+            
+        elif newElement == self.spinningAroundList[0]:
+            if self.spinningAroundList == self.spinningAroundListOld:
+                self.spinningCounter += 1
+            self.spinningAroundListOld = self.spinningAroundList
+            self.spinningAroundList = [newElement]
+            if self.spinningCounter > 4:
+                gameOver = True
+        
+        return gameOver

@@ -36,52 +36,52 @@ class Info(object):
         n = -1
         for i in np.arange(y - 1, -1, -1):
             if (x, i) in snakePosition:
-                n = abs((y - i - 1) / self.sizeOfBoard)
+                n = (1 - (y - i - 1) / self.sizeOfBoard) ** 3
                 break
         if n == -1:
-            n = y / self.sizeOfBoard
+            n = (1 - (y / self.sizeOfBoard)) ** 3
         inputs[0][0] = n
 
         # South
         s = -1
         for i in range(y + 1, self.sizeOfBoard + 1):
             if (x, i) in snakePosition:
-                s = abs(y - i + 1) / self.sizeOfBoard
+                s = (1 - (i - y - 1) / self.sizeOfBoard) ** 3
                 break
         if s == -1:
-            s = (self.sizeOfBoard - y - 1) / self.sizeOfBoard
+            s = (1 - (self.sizeOfBoard - y - 1) / self.sizeOfBoard) ** 3
         inputs[0][1] = s
 
         # West
         w = -1
         for i in range(x - 1, -1, -1):
             if (i, y) in snakePosition:
-                w = abs(x - i - 1) / self.sizeOfBoard
+                w = (1 - (x - i - 1) / self.sizeOfBoard) ** 3
                 break
         if w == -1:
-            w = x / self.sizeOfBoard
+            w = (1 - (x / self.sizeOfBoard)) ** 3
         inputs[0][2] = w
 
         # East
         e = -1
         for i in range(x + 1, self.sizeOfBoard + 1):
             if (i, y) in snakePosition:
-                e = abs(x - i + 1) / self.sizeOfBoard
+                e = (1 - (i - x - 1) / self.sizeOfBoard) ** 3
                 break
         if e == -1:
-            e = (self.sizeOfBoard - x - 1) / self.sizeOfBoard
+            e = (1 - (self.sizeOfBoard - x - 1) / self.sizeOfBoard) ** 3
         inputs[0][3] = e
 
         # Food
         xF, yF = foodCoords
-        
         if xF < x:
-            inputs[0][4] = (x - xF) / self.sizeOfBoard
+            inputs[0][4] = 1 - (x - xF) / self.sizeOfBoard
         elif xF > x:
-            inputs[0][5] = (xF - x) / self.sizeOfBoard
+            inputs[0][5] = 1 - (xF - x) / self.sizeOfBoard
+            
         if yF < y:
-            inputs[0][6] = (y - yF) / self.sizeOfBoard
+            inputs[0][6] = 1 - (y - yF) / self.sizeOfBoard
         elif yF > y:
-            inputs[0][7] = (yF - y) / self.sizeOfBoard
+            inputs[0][7] = 1 - (yF - y) / self.sizeOfBoard
             
         return inputs

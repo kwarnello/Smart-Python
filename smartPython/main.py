@@ -94,6 +94,7 @@ class Main():
         while self.running:
             start = time.time()
             inputs = self.info.getAllInfo(self.snake, self.food.position)
+            #print(inputs)
             decision = self.NN.predict(inputs)
             self.time_nn += (time.time() - start)
             
@@ -117,11 +118,14 @@ class Main():
         try:
             bestMember = self.best.getNextGeneration()
             self.generation = self.best.getter
-            self.mainFrame.updateConections(bestMember.weights)
-            self.NN.setNewWeights(bestMember.weights)
             self.snake = snake.Snake(self)
             self.food = food.Food(self.snake)
+            
+            self.NN.setNewWeights(bestMember.weights)
+            self.mainFrame.updateNewSnake(bestMember.weights)
+
         except Exception:
+            print("Error w load snake")
             self.running = False
             self.mainFrame.flushAfterLoad()
             self.mainFrame.firstScreen()
