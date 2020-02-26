@@ -145,7 +145,7 @@ class Snake(object):
         gameOver = False
         self.spinningAroundList.append(newElement)
         
-        if len(self.spinningAroundList) > 50:
+        if len(self.spinningAroundList) > 100:
             self.spinningAroundList = []
             self.spinningAroundListOld = []
             self.spinningCounter = 0
