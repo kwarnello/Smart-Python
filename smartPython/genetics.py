@@ -15,7 +15,7 @@ class Genetics(object):
     Class that will handle staff with genetic algorithms, population, mutation etc.
     '''
 
-    def __init__(self, populationSize=2000, percentageWeak=0.9, percentageMutations=0.0005, percentageNewInPopulation=0.005):
+    def __init__(self, populationSize=5000, percentageWeak=0.9, percentageMutations=0.005, percentageNewInPopulation=0.005):
         '''
         Constructor
         '''
